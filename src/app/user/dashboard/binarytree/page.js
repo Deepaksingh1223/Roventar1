@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
-import { getUserId } from "@/app/api/auth";
+import { AuthLogin } from "@/app/api/auth";
 import { createPortal } from "react-dom";
 
 // ─── Helper to build tree from flat API data ────────────────────────────────//
@@ -546,26 +546,27 @@ export default function BinaryTree() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [signupModal, setSignupModal] = useState(null);
   const [history, setHistory] = useState([]);
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [treeData, setTreeData] = useState(null);
   const [focusedNode, setFocusedNode] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userId = getUserId();
+  const userId = AuthLogin();
   const token = Cookies.get("token");
 
-  const fetchTreeByURID = async (urid, saveHistory = true) => {
+  const fetchTreeByURID = async (userId, saveHistory = true) => {
     try {
       setLoading(true);
       setError(null);
 
       // current root history me save karo
-      if (saveHistory && treeData?.urid) {
-        setHistory((prev) => [...prev, treeData.urid]);
+      if (saveHistory && treeData?.id) {
+        setHistory((prev) => [...prev, treeData.id]);
       }
 
       const response = await fetch(
-        `https://app.xoxofx.com/api/Community/getdownLineTreeDetails`,
+        `https://app.xoxofx.com/api/Community/getdownLineTreeDetails?Loginid=${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -612,8 +613,8 @@ export default function BinaryTree() {
       return;
     }
 
-    fetchTreeByURID();
-  }, [token]);
+    fetchTreeByURID(userId);
+  }, [token, userId]);
 
   const handleTooltip = useCallback((node, x, y) => setTooltip({ node, x, y }), []);
   const handleHideTooltip = useCallback(() => setTooltip(null), []);
@@ -624,9 +625,9 @@ export default function BinaryTree() {
 
   const handleFocus = useCallback(
     (node) => {
-      if (!node?.urid) return;
+      if (!node?.id) return;
 
-      fetchTreeByURID(node.urid);
+      fetchTreeByURID(node.id);
     },
     [token, treeData]
   );
@@ -724,12 +725,12 @@ export default function BinaryTree() {
                 className="bt-btn-back"
                 onClick={async () => {
                   const prevHistory = [...history];
-                  const lastURID = prevHistory.pop();
+                  const lastId = prevHistory.pop();
 
                   setHistory(prevHistory);
 
-                  if (lastURID) {
-                    await fetchTreeByURID(lastURID, false);
+                  if (lastId) {
+                    await fetchTreeByURID(lastId, false);
                   }
                 }}
               >
