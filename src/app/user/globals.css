@@ -1444,4 +1444,8 @@ html .btn-g2 {
 html .btn-g2 { border-radius: 12px !important; }
 html .btn-g2:hover { background: var(--bg-hover) !important; border-color: var(--border2) !important; color: var(--brand-cyan) !important; }
 
+/* Keep the notification menu above dashboard content. */
+html .topbar { z-index: 10000 !important; }
+html .topbar .tb-r { position: relative; z-index: 10001; }
+
 /* ==== AKCELPE x ROVENTAR THEME PATCH — END ==== */

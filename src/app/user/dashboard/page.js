@@ -1025,7 +1025,7 @@ export default function DashboardPage() {
 
           <RankProgress activeRank={dashboardData?.[0]?.UserRank} NextRank={dashboardData?.[0]?.NextRank} totQualifyRnk={dashboardData?.[0]?.totQualifyRnk} />
 
-    {/* USER PROFILE STRIP */}
+    {/* USER PROFILE STRIP */}x 
           <div className="dx-card dx-profile-strip mb-4">
             <div className="dx-avatar">{(dashboardData?.[0]?.UserName || 'U').slice(0, 2).toUpperCase()}</div>
             <div className="flex-grow-1">
