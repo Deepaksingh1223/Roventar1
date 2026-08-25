@@ -527,25 +527,24 @@ export default function LoginPage() {
       <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
       <link rel="stylesheet" href="/assets/css/login.css" />
-
-      <Toaster
+     <Toaster
         position="top-right"
         toastOptions={{
           duration: 4000,
           style: {
             background: "#060918",
-            color: "#e2e8f0",
-            border: "1px solid rgba(139,92,246,0.3)",
+            color: "#e8e0fa",
+            border: "1px solid rgba(34,232,212,0.25)",
             borderRadius: "12px",
             fontSize: "13px",
           },
-          success: { iconTheme: { primary: "#22d3ee", secondary: "#060918" } },
-          error: { iconTheme: { primary: "#ef4444", secondary: "#e2e8f0" } },
+          success: { iconTheme: { primary: "#22e8d4", secondary: "#04060b" } },
+          error: { iconTheme: { primary: "#ef4444", secondary: "#e8e0fa" } },
         }}
       />
 
       {/* Full-screen container */}
-      <div className="min-vh-100 d-flex align-items-center justify-content-center px-3 py-5 position-relative overflow-hidden login-bg">
+      <div className="login-theme min-vh-100 d-flex align-items-center justify-content-center px-3 py-5 position-relative overflow-hidden">
         {/* Orb - purple top-left */}
         <div className="position-absolute rounded-circle pe-none orb-purple" />
 

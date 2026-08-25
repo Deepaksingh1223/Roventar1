@@ -13,11 +13,10 @@ import { getUserId, doUserLogout } from "@/app/api/auth";
 import Link from 'next/link';
 import { FiLogOut } from "react-icons/fi";
 
-export default function DashboardHeader({ theme, toggleTheme }) {
+export default function DashboardHeader({ theme, toggleTheme, sidebarOpen, setSidebarOpen }) {
 
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showBotPopup, setShowBotPopup] = useState(false);
   const [showRefPopup, setShowRefPopup] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -264,18 +263,7 @@ export default function DashboardHeader({ theme, toggleTheme }) {
   }, [showUserMenu, notificationsDropDown, seenNotifications, notificationsArray]);
 
   const toggleSidebar = () => {
-    const sidebar = document.querySelector(".sidebar");
-    if (!sidebar) return;
-
-    if (sidebarOpen) {
-      sidebar.style.width = "300px";
-      sidebar.style.overflow = "hidden";
-    } else {
-      sidebar.style.width = "0px";
-      sidebar.style.overflow = "hidden";
-    }
-
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen((isOpen) => !isOpen);
   };
 
   const closeBot = () => setShowBotPopup(false);

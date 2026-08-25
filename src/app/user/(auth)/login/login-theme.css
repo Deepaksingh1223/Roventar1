@@ -1,0 +1,105 @@
+@import "tailwindcss/theme.css";
+@import "tailwindcss/utilities.css";
+
+@source "./page.jsx";
+
+.login-theme {
+  @apply !text-[#eef3f8];
+  background-color: #04060b !important;
+  background-image: linear-gradient(rgba(4, 6, 11, 0.86), rgba(4, 6, 11, 0.94)), url("/login-bg.png") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.login-theme .login-card {
+  @apply !text-[#eef3f8] !border-[rgba(140,180,200,0.22)];
+  background: rgba(13, 20, 34, 0.88) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55), 0 0 50px rgba(34, 232, 212, 0.08) !important;
+}
+
+.login-theme .shimmer-line {
+  @apply !bg-gradient-to-r from-transparent via-[#22e8d4] to-transparent;
+}
+
+.login-theme .divider-line,
+.login-theme .or-divider {
+  @apply !bg-[rgba(140,180,200,0.18)];
+}
+
+.login-theme .signin-text,
+.login-theme .login-label {
+  @apply !text-[#eef3f8];
+}
+
+.login-theme .input-icon,
+.login-theme .password-toggle {
+  @apply !text-[#22e8d4];
+}
+
+.login-theme .login-input {
+  @apply !text-[#eef3f8] !border-[rgba(140,180,200,0.24)] !bg-[rgba(255,255,255,0.04)];
+  caret-color: #22e8d4 !important;
+}
+
+.login-theme .login-input:focus {
+  @apply !border-[#22e8d4] !bg-[rgba(34,232,212,0.08)];
+  box-shadow: 0 0 0 3px rgba(34, 232, 212, 0.1) !important;
+}
+
+.login-theme .login-input::placeholder {
+  @apply !text-[#8ea0b5];
+}
+
+.login-theme .forgot-password {
+  @apply !text-[#8ea0b5];
+}
+
+.login-theme .forgot-password:hover {
+  @apply !text-[#22e8d4];
+}
+
+.login-theme .captcha-btn {
+  @apply !border-[rgba(34,232,212,0.3)] !bg-[rgba(34,232,212,0.08)] !text-[#22e8d4];
+}
+
+.login-theme .captcha-btn:hover {
+  @apply !bg-[rgba(34,232,212,0.16)] !text-[#7bfff0];
+}
+
+.login-theme .login-submit {
+  @apply !border-0 !text-[#03110f] !bg-gradient-to-r from-[#22e8d4] to-[#17b8a8];
+  box-shadow: 0 10px 28px rgba(34, 232, 212, 0.18) !important;
+}
+
+.login-theme .login-submit:hover:not(:disabled) {
+  filter: brightness(1.08) !important;
+}
+
+.login-theme .signup-button {
+  @apply !border-[rgba(140,180,200,0.28)] !text-[#eef3f8] !bg-transparent;
+}
+
+.login-theme .signup-button:hover {
+  @apply !border-[#22e8d4] !bg-[rgba(34,232,212,0.08)] !text-[#7bfff0];
+}
+
+.login-theme .error-message {
+  @apply !text-[#e8836b];
+}
+
+.login-theme .general-error {
+  @apply !border-[rgba(232,131,107,0.28)] !bg-[rgba(232,131,107,0.08)] !text-[#f2b0a0];
+}
+
+.loader-container {
+  @apply !bg-[#04060b];
+}
+
+.loader-spinner {
+  @apply !border-[rgba(34,232,212,0.2)] !border-t-[#22e8d4] !border-r-[#cba463];
+}
+
+.loader-text {
+  @apply !text-[#22e8d4];
+}

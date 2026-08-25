@@ -11,8 +11,12 @@ export default function RootLayout({ children }) {
     if (typeof window === 'undefined') return 'light';
     return localStorage.getItem('theme') || 'light';
   });
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+
+  useEffect(() => {
+    setSidebarOpen(window.innerWidth > 1024);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -238,7 +242,7 @@ export default function RootLayout({ children }) {
       <div id="pts"></div>
 
       <div className="layout" data-sidebar-open={sidebarOpen ? "1" : "0"}>
-        <button
+        {/* <button
           type="button"
           className="sidebar-hamburger"
           aria-label="Toggle sidebar"
@@ -247,7 +251,7 @@ export default function RootLayout({ children }) {
           <span className="hamburger-line"></span>
           <span className="hamburger-line"></span>
           <span className="hamburger-line"></span>
-        </button>
+        </button> */}
 
         <div
           className="sidebar-wrap"
@@ -260,7 +264,12 @@ export default function RootLayout({ children }) {
         </div>
 
         <div className="main">
-          <DashboardTopbar theme={theme} toggleTheme={toggleTheme} />
+          <DashboardTopbar
+            theme={theme}
+            toggleTheme={toggleTheme}
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
           <main className="content">{children}</main>
         </div>
       </div>

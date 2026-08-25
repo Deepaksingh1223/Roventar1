@@ -145,7 +145,7 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
           marginBottom: 8,
         }}
       >
-        <span style={{ fontSize: 13, color: "#000000" }}>
+        <span style={{ fontSize: 13, color: "#fff" }}>
           Slide to complete the puzzle
         </span>
         <button
@@ -158,10 +158,10 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "rgba(139, 92, 246, 0.08)",
-            border: "1px solid rgba(139, 92, 246, 0.25)",
+            background: "rgba(34, 232, 212, 0.08)",
+            border: "1px solid rgba(34, 232, 212, 0.25)",
             borderRadius: 8,
-            color: "#79c7f3",
+            color: "#22e8d4",
             cursor: "pointer",
           }}
         >
@@ -177,8 +177,8 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
           height: PUZZLE_HEIGHT,
           borderRadius: 10,
           overflow: "hidden",
-          border: "1px solid rgba(139, 92, 246, 0.25)",
-          background: "#0a0f2a",
+          border: "1px solid rgba(34, 232, 212, 0.25)",
+          background: "#0a1120",
           userSelect: "none",
           isolation: "isolate",
         }}
@@ -209,7 +209,7 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "rgba(6,9,24,0.9)",
+              background: "rgba(4,6,11,0.9)",
               zIndex: 3,
             }}
           >
@@ -217,9 +217,9 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
               style={{
                 width: 30,
                 height: 30,
-                border: "3px solid rgba(139,92,246,0.25)",
-                borderTop: "3px solid #22d3ee",
-                borderRight: "3px solid #3b82f6",
+                border: "3px solid rgba(34,232,212,0.25)",
+                borderTop: "3px solid #22e8d4",
+                borderRight: "3px solid #cba463",
                 borderRadius: "50%",
                 animation: "puzzleSpin 0.7s linear infinite",
               }}
@@ -275,8 +275,8 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
           marginTop: 10,
           height: 44,
           width: "100%",
-          background: "rgba(139, 92, 246, 0.05)",
-          border: "1px solid rgba(139, 92, 246, 0.15)",
+          background: "rgba(34, 232, 212, 0.05)",
+          border: "1px solid rgba(34, 232, 212, 0.15)",
           borderRadius: 10,
           display: "flex",
           alignItems: "center",
@@ -290,7 +290,7 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
             top: 0,
             bottom: 0,
             width: `${trackFraction * 100}%`,
-            background: "rgba(34, 211, 238, 0.15)",
+            background: "rgba(34, 232, 212, 0.15)",
             pointerEvents: "none",
           }}
         />
@@ -306,7 +306,7 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
             borderRadius: 10,
             background: verified
               ? "linear-gradient(135deg, #22c55e, #16a34a)"
-              : "linear-gradient(135deg, #22d3ee, #3b82f6)",
+              : "linear-gradient(135deg, #22e8d4, #17b8a8)",
             color: "#fff",
             display: "flex",
             alignItems: "center",
@@ -324,7 +324,7 @@ function ImagePuzzleCaptcha({ verified, onVerify, onReset }) {
             width: "100%",
             textAlign: "center",
             fontSize: 13,
-            color: "#000000",
+            color: "#fff",
             pointerEvents: "none",
           }}
         >
@@ -747,34 +747,34 @@ export default function SignupPage() {
   const selectStyles = {
     control: (base, state) => ({
       ...base,
-      backgroundColor: "rgba(139,92,246,0.05)",
-      borderColor: state.isFocused ? "rgb(255 255 255 / 70%)" : "rgba(139,92,246,0.15)",
+      backgroundColor: "rgba(255,255,255,0.04)",
+      borderColor: state.isFocused ? "#22e8d4" : "rgba(140,180,200,0.24)",
       borderRadius: "0.75rem",
       minHeight: "48px",
       boxShadow: "none",
       transition: "all 0.2s",
       cursor: "pointer",
-      "&:hover": { borderColor: "rgba(139,92,246,0.35)" },
+      "&:hover": { borderColor: "rgba(34,232,212,0.55)" },
     }),
 
     menuList: (base) => ({ ...base, padding: "4px", maxHeight: "200px" }),
     option: (base, state) => ({
       ...base,
-      backgroundColor: state.isFocused ? "rgba(139,92,246,0.1)" : "transparent",
-      color: "#000000",
+      backgroundColor: state.isFocused ? "rgba(34,232,212,0.1)" : "transparent",
+      color: "#eef3f8",
       fontSize: "13px",
       borderRadius: "8px",
       cursor: "pointer",
       padding: "8px 10px",
     }),
-    singleValue: (base) => ({ ...base, color: "#000000", fontSize: "14px" }),
-    placeholder: (base) => ({ ...base, color: "rgba(0, 0, 0, 0.3)", fontSize: "14px" }),
-    input: (base) => ({ ...base, color: "#000000", fontSize: "14px" }),
+    singleValue: (base) => ({ ...base, color: "#eef3f8", fontSize: "14px" }),
+    placeholder: (base) => ({ ...base, color: "#8ea0b5", fontSize: "14px" }),
+    input: (base) => ({ ...base, color: "#eef3f8", fontSize: "14px" }),
     indicatorSeparator: () => ({ display: "none" }),
     dropdownIndicator: (base) => ({
       ...base,
-      color: "rgba(0, 0, 0, 0.4)",
-      "&:hover": { color: "rgba(0, 0, 0, 0.8)" },
+      color: "#8ea0b5",
+      "&:hover": { color: "#22e8d4" },
     }),
   }
 
@@ -788,13 +788,13 @@ export default function SignupPage() {
 
   const handleFocus = (e) => {
     e.target.style.borderColor = "rgb(255 255 255 / 70%)"
-    e.target.style.background = "rgba(139,92,246,0.08)"
+    e.target.style.background = "rgba(34,232,212,0.08)"
     e.target.style.boxShadow = "none"
   }
 
   const handleBlurStyle = (e, hasError) => {
-    e.target.style.borderColor = hasError ? "rgba(239,68,68,0.45)" : "rgba(139,92,246,0.15)"
-    e.target.style.background = "rgba(139,92,246,0.05)"
+    e.target.style.borderColor = hasError ? "rgba(239,68,68,0.45)" : "rgba(140,180,200,0.24)"
+    e.target.style.background = "rgba(255,255,255,0.04)"
     e.target.style.boxShadow = "none"
   }
 
@@ -810,7 +810,7 @@ export default function SignupPage() {
     left: "10px",
     top: "50%",
     transform: "translateY(-50%)",
-    color: "rgba(0, 0, 0, 0.45)",
+    color: "#22e8d4",
     pointerEvents: "none",
   }
 
@@ -873,23 +873,23 @@ export default function SignupPage() {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
       <link rel="stylesheet" href="/assets/css/login.css" />
 
-      <Toaster
+     <Toaster
         position="top-right"
         toastOptions={{
           duration: 4000,
           style: {
             background: "#060918",
             color: "#e8e0fa",
-            border: "1px solid rgba(139,92,246,0.25)",
+            border: "1px solid rgba(34,232,212,0.25)",
             borderRadius: "12px",
             fontSize: "13px",
           },
-          success: { iconTheme: { primary: "#8b5cf6", secondary: "#060918" } },
+          success: { iconTheme: { primary: "#22e8d4", secondary: "#04060b" } },
           error: { iconTheme: { primary: "#ef4444", secondary: "#e8e0fa" } },
         }}
       />
 
-      <div className="min-vh-100 d-flex align-items-center justify-content-center px-3 py-5 position-relative overflow-hidden login-bg">
+      <div className="login-theme min-vh-100 d-flex align-items-center justify-content-center px-3 py-5 position-relative overflow-hidden">
         <div className="position-absolute rounded-circle pe-none orb-purple" />
         <div className="position-absolute rounded-circle pe-none orb-cyan" />
         <div className="position-absolute top-50 start-50 translate-middle rounded-circle pe-none orb-center" />

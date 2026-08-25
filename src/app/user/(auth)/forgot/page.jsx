@@ -75,13 +75,13 @@ export default function ForgotPassword() {
 
   const handleFocus = (e) => {
     e.target.style.borderColor = "rgb(255 255 255 / 70%)";
-    e.target.style.background = "rgba(139,92,246,0.08)";
+    e.target.style.background = "rgba(34,232,212,0.08)";
     e.target.style.boxShadow = "none";
   };
 
   const handleBlurStyle = (e, hasError = false) => {
-    e.target.style.borderColor = hasError ? "rgba(239,68,68,0.45)" : "rgba(139,92,246,0.15)";
-    e.target.style.background = "rgba(139,92,246,0.05)";
+    e.target.style.borderColor = hasError ? "rgba(239,68,68,0.45)" : "rgba(140,180,200,0.24)";
+    e.target.style.background = "rgba(255,255,255,0.04)";
     e.target.style.boxShadow = "none";
   };
 
@@ -106,9 +106,9 @@ export default function ForgotPassword() {
           .loader-spinner {
             width: 60px;
             height: 60px;
-            border: 3px solid rgba(139, 92, 246, 0.2);
-            border-top: 3px solid #8b5cf6;
-            border-right: 3px solid #22d3ee;
+            border: 3px solid rgba(34, 232, 212, 0.2);
+            border-top: 3px solid #22e8d4;
+            border-right: 3px solid #cba463;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
           }
@@ -118,7 +118,7 @@ export default function ForgotPassword() {
           }
           .loader-text {
             margin-top: 20px;
-            color: #8b5cf6;
+            color: #22e8d4;
             font-family: monospace;
             font-size: 14px;
             letter-spacing: 2px;
@@ -151,16 +151,16 @@ export default function ForgotPassword() {
           style: {
             background: "#060918",
             color: "#e8e0fa",
-            border: "1px solid rgba(139,92,246,0.25)",
+            border: "1px solid rgba(34,232,212,0.25)",
             borderRadius: "12px",
             fontSize: "13px",
           },
-          success: { iconTheme: { primary: "#8b5cf6", secondary: "#060918" } },
+          success: { iconTheme: { primary: "#22e8d4", secondary: "#04060b" } },
           error: { iconTheme: { primary: "#ef4444", secondary: "#e8e0fa" } },
         }}
       />
 
-      <div className="min-vh-100 d-flex align-items-center justify-content-center px-3 py-5 position-relative overflow-hidden login-bg">
+      <div className="login-theme min-vh-100 d-flex align-items-center justify-content-center px-3 py-5 position-relative overflow-hidden">
         {/* Orb - purple top-left */}
         <div className="position-absolute rounded-circle pe-none orb-purple" />
         
@@ -201,7 +201,7 @@ export default function ForgotPassword() {
               <div className="mb-4">
                 <label className="login-label">Username</label>
                 <div className="position-relative">
-                  <span className="position-absolute start-0 top-50 translate-middle-y ms-2">
+                  <span className="position-absolute start-0 top-50 translate-middle-y ms-2 input-icon !text-[#22e8d4]">
                     <User size={15} />
                   </span>
                   <input
@@ -225,7 +225,7 @@ export default function ForgotPassword() {
               <div className="mb-4">
                 <label className="login-label">Email Address</label>
                 <div className="position-relative">
-                  <span className="position-absolute start-0 top-50 translate-middle-y ms-2">
+                  <span className="position-absolute start-0 top-50 translate-middle-y ms-2 input-icon !text-[#22e8d4]">
                     <Mail size={15} />
                   </span>
                   <input
@@ -260,7 +260,7 @@ export default function ForgotPassword() {
               {/* OR separator */}
               <div className="d-flex align-items-center gap-2 my-4">
                 <div className="flex-grow-1 or-divider" />
-                <span className="or-text">or</span>
+                <span className="or-text !text-[#8ea0b5]">or</span>
                 <div className="flex-grow-1 or-divider" />
               </div>
 
@@ -277,7 +277,7 @@ export default function ForgotPassword() {
               {/* Success divider */}
               <div className="d-flex align-items-center gap-3 mt-4 mb-4">
                 <div className="flex-grow-1 divider-line" />
-                <span className="signin-text" style={{ fontSize: "10px", color: "rgba(139,92,246,0.45)" }}>
+                <span className="signin-text !text-[#22e8d4]" style={{ fontSize: "10px" }}>
                   Email Sent
                 </span>
                 <div className="flex-grow-1 divider-line" />
@@ -327,7 +327,7 @@ export default function ForgotPassword() {
               {/* OR separator */}
               <div className="d-flex align-items-center gap-2 my-4">
                 <div className="flex-grow-1 or-divider" />
-                <span className="or-text">or</span>
+                <span className="or-text !text-[#8ea0b5]">or</span>
                 <div className="flex-grow-1 or-divider" />
               </div>
 

@@ -34,13 +34,6 @@ export default function DashboardHeader({
 
   // Close Sidebar Function
   const closeSidebar = () => {
-    const sidebar = document.querySelector(".sidebar");
-
-    if (!sidebar) return;
-
-    sidebar.style.width = "0px";
-    sidebar.style.overflow = "hidden";
-
     setSidebarOpen(false);
   };
 
@@ -53,7 +46,7 @@ export default function DashboardHeader({
     <aside className="sidebar">
       <div className="logo-area">
         <Image
-          src="/LOG02.png"
+          src="/Logo1.png"
           alt="Logo"
           width={200}
           height={60}
