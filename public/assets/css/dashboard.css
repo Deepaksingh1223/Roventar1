@@ -286,6 +286,7 @@ button {
   backdrop-filter: blur(28px) saturate(1.4);
   transition: background .4s, border-color .4s, width .3s;
   overflow: auto;
+  height: 100%;
 }
 
 .logo-area {
@@ -296,12 +297,7 @@ button {
   gap: 11px;
   background: var(--bg-card);
 }
-
-[data-theme="dark"] .logo-area img {
-  filter: invert(0.6);
-  transition: filter 0.3s ease;
-}
-
+ 
 .lmark {
   width: 38px;
   height: 38px;
@@ -5661,8 +5657,8 @@ input:checked+.toggle-track+.toggle-thumb {
   --border2: rgba(120, 80, 255, 0.28);
   --border3: rgba(140, 100, 255, 0.45);
   --text-1: #ede9ff;
-  --text-2: #8a81fd;
-  --text-3: #8a81fd;
+  --text-2: #03a9f4;
+  --text-3: #03a9f4;
   --text-4: #1e1b40;
   --shadow: rgba(0, 0, 0, 0.65);
   --glow-c: rgba(124, 58, 237, 0.12);
@@ -13802,7 +13798,7 @@ option:hover {
 }
 
 .pending-bg {
-  background: #f8ff93 !important;
+  background: #2196F3 !important;
 }
 
 .flexing-tab-btn {

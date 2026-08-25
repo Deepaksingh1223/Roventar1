@@ -88,7 +88,6 @@ export default function App() {
   const [orders, setOrders] = useState([]);
   const [inv, setInv] = useState(null);
   const [hov, setHov] = useState(null);
-  const [theme, setTheme] = useState("dark");
   const [bots, setBots] = useState([]);
   const [orderHistory, setOrderHistory] = useState([]);
   const [dashboardData, setDashboardData] = useState(null);
@@ -293,21 +292,6 @@ export default function App() {
       setBots(activeProductsData);
     }
   }, [activeProductsData]);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    setTheme(savedTheme);
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
-
-
 
 const downloadPDFInvoice = async (orderData) => {
     const d = orderData;

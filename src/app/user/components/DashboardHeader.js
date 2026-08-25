@@ -46,7 +46,7 @@ export default function DashboardHeader({
     <aside className="sidebar">
       <div className="logo-area">
         <Image
-          src="/Logo1.png"
+          src="/LOGO.png"
           alt="Logo"
           width={200}
           height={60}

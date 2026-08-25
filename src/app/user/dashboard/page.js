@@ -49,12 +49,10 @@ export default function DashboardPage() {
   const [botActiveTime, setBotActiveTime] = useState(null);
 
   // Theme (light / dark) — persisted to localStorage
-  const [theme, setTheme] = useState('light');
+  const [theme] = useState('dark');
 
   const BOT_SESSION_KEY = 'xoxoBotActive';
   const BOT_START_KEY = 'xoxoBotStartTime';
-  const THEME_KEY = 'xoxoTheme';
-
 
   function formatElapsedTime(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
@@ -89,30 +87,6 @@ export default function DashboardPage() {
   const isKidNotOne = dashboardData?.[0]?.Kid !== 1;
   const isKidFive = dashboardData?.[0]?.Kid === 5;
   const isKidOne = dashboardData?.[0]?.Kid === 1;
-
-  // ---- Theme init / persistence (does not touch any business logic) ----
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(THEME_KEY);
-      if (stored === 'dark' || stored === 'light') {
-        setTheme(stored);
-      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setTheme('dark');
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(THEME_KEY, theme);
-    } catch (e) {
-      // ignore
-    }
-  }, [theme]);
-
-  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
   useEffect(() => {
     // if (!userURID) return;
@@ -747,32 +721,32 @@ export default function DashboardPage() {
       )
     },
     {
-      key: 'Withdraw', label: 'Withdraw', path: '/user/dashboard/withdraw', icon: (
+      key: 'Withdraw', label: 'Withdraw', path: '/user/dashboard/wallet-statement', icon: (
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" width="18" height="18"><path d="M10 3v11M6 10l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 16.5h12" strokeLinecap="round" /></svg>
       )
     },
     {
-      key: 'BuyPackage', label: 'Buy Package', path: '/user/dashboard/package', icon: (
+      key: 'BuyPackage', label: 'Buy Package', path: '/user/dashboard/analytics', icon: (
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" width="18" height="18"><path d="M3 7l7-4 7 4-7 4-7-4z" /><path d="M3 7v6l7 4 7-4V7" /></svg>
       )
     },
     {
-      key: 'MyTeam', label: 'My Team', path: '/user/dashboard/team', icon: (
+      key: 'MyTeam', label: 'My Team', path: '/user/dashboard/fund-director', icon: (
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" width="18" height="18"><circle cx="7" cy="6" r="2.4" /><circle cx="14" cy="7" r="2" /><path d="M2 17c0-2.6 2.3-4.5 5-4.5s5 1.9 5 4.5" strokeLinecap="round" /><path d="M13 12.8c1.9.3 3.5 1.9 3.5 4.2" strokeLinecap="round" /></svg>
       )
     },
     {
-      key: 'GrowthRewards', label: 'Growth Rewards', path: '/user/dashboard/growth-rewards', icon: (
+      key: 'GrowthRewards', label: 'Growth Rewards', path: '/user/dashboard/Team', icon: (
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" width="18" height="18"><circle cx="10" cy="10" r="6.5" /><path d="M10 6.5v3.5l2.3 2.3" strokeLinecap="round" strokeLinejoin="round" /></svg>
       )
     },
     {
-      key: 'Accelerator', label: 'Accelerator', path: '/user/dashboard/accelerator', icon: (
+      key: 'Accelerator', label: 'Accelerator', path: '/user/dashboard/income-statement', icon: (
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" width="18" height="18"><path d="M10 2l1.8 4.6L17 8l-4 3.2L14 17l-4-2.7L6 17l1-5.8-4-3.2 5.2-1.4L10 2z" strokeLinejoin="round" /></svg>
       )
     },
     {
-      key: 'Transactions', label: 'Transactions', path: '/user/dashboard/transactions', icon: (
+      key: 'Transactions', label: 'Transactions', path: '/user/dashboard/my-rewards', icon: (
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" width="18" height="18"><path d="M4 6h9l-2.5-2.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M16 14H7l2.5 2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
       )
     },
@@ -1342,7 +1316,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
 
-                <p className="small dx-muted mb-3">
+                <p className="small text-white mb-3">
                   AI-driven Forex &amp; Crypto trading engine operating 24/7 — automatically scanning market trends and executing profitable trading opportunities with high-speed precision.
                 </p>
 
@@ -1555,7 +1529,7 @@ export default function DashboardPage() {
             <div className="col-lg-5">
               <div className="dx-card h-100">
                 <div className="fw-bold mb-1 dx-ink">Accelerator Rank</div>
-                <div className="small dx-muted mb-3">Your premium rank achievement system</div>
+                <div className="small text-white mb-3">Your premium rank achievement system</div>
                 <div className="d-flex align-items-center gap-4 flex-wrap">
                   <CircularGauge
                     percent={rankLevels.find(r => r.status === 'current')?.progress || 0}

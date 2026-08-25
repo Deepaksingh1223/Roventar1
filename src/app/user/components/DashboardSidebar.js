@@ -13,7 +13,7 @@ import { getUserId, doUserLogout } from "@/app/api/auth";
 import Link from 'next/link';
 import { FiLogOut } from "react-icons/fi";
 
-export default function DashboardHeader({ theme, toggleTheme, sidebarOpen, setSidebarOpen }) {
+export default function DashboardHeader({ sidebarOpen, setSidebarOpen }) {
 
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -452,15 +452,6 @@ export default function DashboardHeader({ theme, toggleTheme, sidebarOpen, setSi
           <div className="pchip">
             ▲ +${dashboardData?.[0]?.TodayIncome || "0"} today
           </div>
-
-          <button
-            onClick={toggleTheme}
-            className={`theme-btn nbtn ${theme === "dark" ? "active" : ""}`}
-            style={{ fontSize: "18px" }}
-          >
-            🌙
-          </button>
-        
 
           <div style={{ position: "relative" }} ref={userMenuRef}>
             <button

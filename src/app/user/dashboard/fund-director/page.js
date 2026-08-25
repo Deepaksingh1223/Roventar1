@@ -11,15 +11,6 @@ import { usePathname } from "next/navigation";
 export default function FundDirector() {
   const [activeTab, setActiveTab] = useState("deposit");
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
-
   function getPName(pathname) {
     if (!pathname) return "";
     const parts = pathname.split("/");
