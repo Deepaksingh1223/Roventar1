@@ -8,15 +8,6 @@ import { usePathname } from "next/navigation";
 export default function MyRewards() {
   const [activeTab, setActiveTab] = useState("myRewards");
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
-
   function getPName(pathname) {
     if (!pathname) return "";
     const parts = pathname.split("/");

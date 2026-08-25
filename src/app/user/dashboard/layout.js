@@ -7,10 +7,6 @@ import DashboardTopbar from "../components/DashboardSidebar";
 import Head from "next/head";
 
 export default function RootLayout({ children }) {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window === 'undefined') return 'light';
-    return localStorage.getItem('theme') || 'light';
-  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -27,15 +23,8 @@ export default function RootLayout({ children }) {
   }, []);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.dataset.theme = savedTheme;
-    setTheme(savedTheme);
+    document.documentElement.dataset.theme = "dark";
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -44,11 +33,6 @@ export default function RootLayout({ children }) {
     }
   }, []);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
-  
   if (pageLoading) {
     return (
       <>
@@ -265,8 +249,6 @@ export default function RootLayout({ children }) {
 
         <div className="main">
           <DashboardTopbar
-            theme={theme}
-            toggleTheme={toggleTheme}
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
           />

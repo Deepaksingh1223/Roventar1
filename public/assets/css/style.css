@@ -165,7 +165,7 @@ a {
 }
 
 a:hover {
-    color: var(--title-color)
+    color: #ffffff
 }
 
 a:active,

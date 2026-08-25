@@ -155,7 +155,7 @@ export default function HomePage() {
                 Profit Faster.
                 <br />
                 Build Wealth{" "}
-                  Smarter.
+                Smarter.
               </h1>
               <p className="mt-6 text-[1.15rem] text-[#8ea0b5] max-w-[460px] leading-[1.6] opacity-0 [animation:heroFadeUp_0.9s_var(--ease-brand)_0.4s_forwards]">
                 Roventar is a next-generation trading technology ecosystem — combining AI-driven analytics, automated infrastructure and real-time global market data into a single, secure platform.
@@ -163,12 +163,15 @@ export default function HomePage() {
               <div className="flex gap-4 mt-[38px] flex-wrap opacity-0 [animation:heroFadeUp_0.9s_var(--ease-brand)_0.55s_forwards]">
                 <a
                   href="/user/register"
-                  className="relative inline-flex items-center justify-center gap-2.5 rounded-full font-semibold py-[15px] px-[30px] 
-                  text-[0.94rem] text-[#03110f] [background:linear-gradient(135deg,#22e8d4_0%,#17b8a8_100%)] 
-                  transition-transform duration-350 hover:-translate-y-0.5 
-                  hover:[box-shadow:0_12px_32px_-8px_rgba(34,232,212,.55),0_0_24px_-4px_rgba(203,164,99,.4)]"
+                  className="relative inline-flex items-center justify-center gap-2.5 rounded-full font-semibold py-[15px] px-[30px]
+        text-[0.94rem] !text-[#03110f]
+         [background:linear-gradient(135deg,#22e8d4_0%,#17b8a8_100%)]
+         transition-transform duration-350 hover:-translate-y-0.5
+           hover:[box-shadow:0_12px_32px_-8px_rgba(34,232,212,.55),0_0_24px_-4px_rgba(203,164,99,.4)]"
                 >
-                  <span>Explore Platform</span>
+                  <span className="transition-colors duration-300 hover:text-white">
+                    Explore Platform
+                  </span>
                 </a>
                 <a
                   href="/user/login"
@@ -237,8 +240,8 @@ export default function HomePage() {
               </span>
               <h2 className="font-display font-semibold text-[#eef3f8] leading-[1.1] mb-5 [font-size:clamp(1.9rem,3.6vw,2.75rem)]">
                 Turning complex market data into{" "}
-              
-                  clear opportunities. 
+
+                clear opportunities.
               </h2>
               <p className="text-[#8ea0b5] leading-[1.75] mb-[25px]">
                 Roventar is a next-generation digital trading technology platform designed for modern market participants. Our ecosystem combines advanced data infrastructure, artificial intelligence and automation to simplify the way users understand and interact with global markets.
@@ -328,11 +331,10 @@ export default function HomePage() {
                 {["Analytics", "Automation", "Global Data", "Security"].map((t, i) => (
                   <button
                     key={t}
-                    className={`tab-button cursor-pointer border rounded-[10px] text-[0.87rem] py-[13px] px-[18px] transition-[color,background,border-color] duration-300 ${
-                      i === 0
+                    className={`tab-button cursor-pointer border rounded-[10px] text-[0.87rem] py-[13px] px-[18px] transition-[color,background,border-color] duration-300 ${i === 0
                         ? "text-[#22e8d4] bg-[#22e8d4]/[0.09] border-[rgba(34,232,212,0.25)]"
                         : "text-[#8ea0b5] bg-transparent border-transparent hover:text-[#22e8d4] hover:bg-[#22e8d4]/[0.09] hover:border-[rgba(34,232,212,0.25)]"
-                    }`}
+                      }`}
                     data-tab={t.toLowerCase().replace(" ", "")}
                   >
                     {t}
@@ -615,8 +617,8 @@ export default function HomePage() {
               </span>
               <h2 className="relative font-display font-semibold leading-[1.15] max-w-[760px] mx-auto [font-size:clamp(2rem,4.2vw,3.2rem)]">
                 Smart Vision.{" "}
-                
-                  Stronger Future. 
+
+                Stronger Future.
               </h2>
 
               <div className="reveal-stagger relative grid gap-px mt-14 rounded-2xl overflow-hidden border border-[rgba(140,180,200,0.14)] bg-[rgba(140,180,200,0.14)] [grid-template-columns:repeat(4,1fr)] max-[820px]:!grid-cols-2">
@@ -706,11 +708,10 @@ export default function HomePage() {
                   <div className="flex items-center justify-between gap-5 cursor-pointer py-[26px] px-1">
                     <h4 className="text-[1.02rem] font-medium text-[#eef3f8]">{q}</h4>
                     <div
-                      className={`relative flex-shrink-0 w-[30px] h-[30px] rounded-full border flex items-center justify-center transition-[border-color,background] duration-300 before:content-[''] before:absolute before:w-[10px] before:h-px after:content-[''] after:absolute after:w-px after:h-[10px] before:transition-transform after:transition-transform before:duration-350 after:duration-350 ${
-                        open
+                      className={`relative flex-shrink-0 w-[30px] h-[30px] rounded-full border flex items-center justify-center transition-[border-color,background] duration-300 before:content-[''] before:absolute before:w-[10px] before:h-px after:content-[''] after:absolute after:w-px after:h-[10px] before:transition-transform after:transition-transform before:duration-350 after:duration-350 ${open
                           ? "border-[#22e8d4] bg-[#22e8d4]/[0.14] before:bg-[#22e8d4] after:bg-[#22e8d4] after:scale-y-0"
                           : "border-[rgba(140,180,200,0.14)] before:bg-[#8ea0b5] after:bg-[#8ea0b5]"
-                      }`}
+                        }`}
                     />
                   </div>
                   <div className={`overflow-hidden transition-[max-height] duration-500 ${open ? "max-h-[300px]" : "max-h-0"}`}>
@@ -813,7 +814,7 @@ export default function HomePage() {
             <p className="text-[0.78rem] text-[#5c6c80]">Designed as a technology & platform experience.</p>
           </div>
         </div>
-      </footer> 
+      </footer>
       <Script src="/script.js" strategy="afterInteractive" />
     </>
   );
