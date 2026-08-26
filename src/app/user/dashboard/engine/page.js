@@ -342,7 +342,7 @@ const fetchTransactionLog = useCallback(async () => {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="w-12 h-12 mx-auto mb-4 border-4 border-purple-500 rounded-full border-t-transparent animate-spin"></div>
-            <p className="text-gray-400">Loading XOXO Engine data...</p>
+            <p className="text-gray-400">Loading Roventar Engine data...</p>
           </div>
         </div>
       </div>
@@ -357,7 +357,7 @@ const fetchTransactionLog = useCallback(async () => {
             <div className="scard main-card">
               <div className="card-header">
                 <div className="card-title-section">
-                  <div className="card-title">XOXO Engine</div>
+                  <div className="card-title">Roventar Engine</div>
                   <div className="card-subtitle">
                     AI MEV + cross-chain arb · 24/7 autonomous — Auto-updates every 2 minutes
                   </div>
