@@ -5,13 +5,16 @@ import Cookies from "js-cookie";
 import DashboardSidebar from "../components/DashboardHeader";
 import DashboardTopbar from "../components/DashboardSidebar";
 import Head from "next/head";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const { setTheme } = useTheme();
 
   useEffect(() => {
-    setSidebarOpen(window.innerWidth > 1024);
+    const isPhoneView = window.matchMedia("(max-width: 1024px)").matches;
+    setSidebarOpen(!isPhoneView);
   }, []);
 
   useEffect(() => {
@@ -23,8 +26,8 @@ export default function RootLayout({ children }) {
   }, []);
 
   useEffect(() => {
-    document.documentElement.dataset.theme = "dark";
-  }, []);
+    setTheme(false);
+  }, [setTheme]);
 
   useEffect(() => {
     const token = Cookies.get("token");

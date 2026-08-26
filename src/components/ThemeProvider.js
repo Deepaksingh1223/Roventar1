@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const ThemeContext = createContext();
 
@@ -10,31 +10,34 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     setIsClient(true);
-    // Check for saved preference or system preference
+    // Use light mode by default and preserve an explicit user preference.
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    if (savedTheme === 'dark') {
       setIsDark(true);
       document.documentElement.classList.add('dark');
+      document.documentElement.dataset.theme = 'dark';
     } else {
       setIsDark(false);
       document.documentElement.classList.remove('dark');
+      document.documentElement.dataset.theme = 'light';
     }
+  }, []);
+
+  const setTheme = useCallback((dark) => {
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    setIsDark(dark);
   }, []);
 
   const toggleTheme = () => {
     const newIsDark = !isDark;
-    setIsDark(newIsDark);
-    
-    if (newIsDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
+    setTheme(newIsDark);
   };
+
+  /* Keep theme changes in one place so CSS variables and component state match. */
+  const themeValue = { isDark, toggleTheme, setTheme };
 
   // Don't render until client-side to avoid hydration mismatch
   if (!isClient) {
@@ -42,7 +45,7 @@ export function ThemeProvider({ children }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+    <ThemeContext.Provider value={themeValue}>
       {children}
     </ThemeContext.Provider>
   );
