@@ -57,7 +57,7 @@
 
 .summary-value { 
   font-weight: 700;
-  background: linear-gradient(90deg, #7133db, #e33dff);
+  background: linear-gradient(90deg, #07dbc7, #e33dff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -190,7 +190,7 @@
 }
 
 .tab-btn.active {
-  background: #7133db;
+  background: #07dbc7;
   color: white;
 }
 
@@ -213,7 +213,7 @@
 
 .page-btn {
   padding: 0.65rem 1.25rem;
-  background: linear-gradient(135deg, #7133db 0%, #5e2fb8 100%);
+  background: linear-gradient(135deg, #07dbc7 0%, #5e2fb8 100%);
   border: 1px solid rgba(113, 51, 219, 0.3);
   color: white;
   font-weight: 600;
@@ -226,7 +226,7 @@
 }
 
 .page-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #8145ff 0%, #7133db 100%);
+  background: linear-gradient(135deg, #8145ff 0%, #07dbc7 100%);
   box-shadow: 0 6px 20px rgba(113, 51, 219, 0.4);
   transform: translateY(-2px);
 }

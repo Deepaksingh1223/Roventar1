@@ -216,7 +216,7 @@ const LIGHT_C = {
   text2: "#647785",
   text3: "#8a9ba7",
   primary: "#0e9c98",
-  secondary: "#b8862a",
+  secondary: "#07dbc7",
   primaryLight: "rgba(24, 199, 194, 0.12)",
   primaryBorder: "rgba(24, 199, 194, 0.38)",
   statusBg: "rgba(24, 199, 194, 0.1)",

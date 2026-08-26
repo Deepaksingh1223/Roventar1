@@ -1781,14 +1781,14 @@ html:not([data-theme]):not(.dark) {
   --brand-cyan2: #0fa9b5;
   --brand-teal: #18c7c2;
   --brand-accent: #18c7c2;
-  --brand-green: #19b77a;
-  --brand-gold: #b8862a;
-  --brand-purple: #b8862a;
+  --brand-green: #03bdad;
+  --brand-gold: #07dbc7;
+  --brand-purple: #07dbc7;
   --brand-violet: #0e9c98;
   --brand-red: #d9445f;
   --c: #0e9c98;
   --p: #0e9c98;
-  --a: #b8862a;
+  --a: #07dbc7;
   --r: #d9445f;
   --t3: #0e9c98;
   --g1: #647785;
@@ -1818,7 +1818,7 @@ html:not([data-theme]):not(.dark) {
   --cb: #0fa9b5;
   --cd: rgba(24, 199, 194, 0.14);
   --pgg: rgba(24, 199, 194, 0.07);
-  --g: #19b77a;
+  --g: #03bdad;
   --gb: #0d6b47;
   --gd: rgba(25, 183, 122, 0.14);
   --rd: rgba(217, 68, 95, 0.12);
