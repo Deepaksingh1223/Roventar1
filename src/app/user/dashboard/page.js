@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import 'swiper/css/navigation'; 
 import { getUserDashboardDetails } from "../../redux/slices/authSlice";
 import { getallusernotification } from "../../redux/slices/ticketSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,13 +48,16 @@ export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  // UI-only state for the Performance Analytics tabs (no data logic attached)
+  const [analyticsRange, setAnalyticsRange] = useState('7D');
+  const [analyticsMetric, setAnalyticsMetric] = useState('Income');
   const [botActiveTime, setBotActiveTime] = useState(null);
 
   // Theme (light / dark) — persisted to localStorage
   const theme = isDark ? 'dark' : 'light';
 
-  const BOT_SESSION_KEY = 'xoxoBotActive';
-  const BOT_START_KEY = 'xoxoBotStartTime';
+  const BOT_SESSION_KEY = 'RoventarBotActive';
+  const BOT_START_KEY = 'RoventarBotStartTime';
 
   function formatElapsedTime(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
@@ -74,6 +77,15 @@ export default function DashboardPage() {
 
   const userURID = getUserId();
 
+  // Hero greeting helpers (display only)
+  const userDisplayName = dashboardData?.[0]?.UserName || dashboardData?.[0]?.Name || dashboardData?.[0]?.FullName || 'Investor';
+  const greeting = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good Morning';
+    if (h < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  })();
+  const userInitials = String(userDisplayName).trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
   const botStatus = Number(dashboardData?.[0]?.chktodayBotStatus ?? 0);
   const notifications = useSelector((state) => state.ticket?.notificationData);
@@ -346,7 +358,7 @@ export default function DashboardPage() {
 
   const shareOn = (platform) => {
     const refLink = "https://arbion.ai/ref/ARB-a9x7k2-premium";
-    const text = "Join me on XOXO AI Engine - earn up to 8% commission!";
+    const text = "Join me on Roventar AI Engine - earn up to 8% commission!";
     let url = "";
     switch (platform) {
       case "WhatsApp":
@@ -603,8 +615,8 @@ export default function DashboardPage() {
       execGridRef.current.innerHTML = executions.map(exec => `
         <div class="exec-item">
           <div style="display:flex;align-items:center;gap:8px"><span class="tag ${exec.chain.toLowerCase()}">${exec.chain}</span><span style="font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--pb)">${exec.hash}</span></div>
-          <div style="font-family:var(--mono);color:var(--dx-teal);font-weight:900">${exec.profit}</div>
-          <div style="font-size:10px;color:var(--dx-muted)">${exec.time}</div>
+          <div style="font-family:var(--mono);color:var(--dashboardroot-teal);font-weight:900">${exec.profit}</div>
+          <div style="font-size:10px;color:var(--dashboardroot-muted)">${exec.time}</div>
         </div>
       `).join('');
     }
@@ -619,7 +631,7 @@ export default function DashboardPage() {
       fuTrackRef.current.innerHTML = [...users, ...users].map(user => `
         <div class="fu-item">
           <div style="display:flex;align-items:center;gap:6px"><span style="font-size:16px">${user.country}</span><span style="font-weight:600">${user.name}</span></div>
-          <div style="font-family:var(--mono);color:var(--dx-muted);font-weight:700">${user.amount}</div>
+          <div style="font-family:var(--mono);color:var(--dashboardroot-muted);font-weight:700">${user.amount}</div>
         </div>
       `).join('');
     }
@@ -697,7 +709,7 @@ export default function DashboardPage() {
               <stop offset="100%" stopColor={colorTo} />
             </linearGradient>
           </defs>
-          {track && <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--dx-track)" strokeWidth={stroke} />}
+          {track && <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--dashboardroot-track)" strokeWidth={stroke} />}
           <circle
             cx={cx} cy={cy} r={r} fill="none"
             stroke={`url(#${gradId})`} strokeWidth={stroke} strokeLinecap="round"
@@ -806,6 +818,34 @@ export default function DashboardPage() {
     { rank: 'V3', business: '₹25L', status: 'upcoming' },
     { rank: 'V4', business: '₹50L', status: 'upcoming' },
     { rank: 'V5', business: '₹1Cr', status: 'upcoming' },
+  ];
+
+  // Recent wallet activity — replace with API rows when available
+  // Business Overview values — derived from the API fields already in use.
+  // Rename the right-hand side keys if your API uses different names.
+  const inr = (n) => Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  const leftBiz = Number(dashboardData?.[0]?.LeftBussiness ?? dashboardData?.[0]?.LeftBusiness ?? 0);
+  const rightBiz = Number(dashboardData?.[0]?.RightBussiness ?? dashboardData?.[0]?.RightBusiness ?? 0);
+  const totalTeam = dashboardData?.[0]?.TotalTeam ?? ((dashboardData?.[0]?.LeftTeam || 0) + (dashboardData?.[0]?.RightTeam || 0));
+  const activeTeam = dashboardData?.[0]?.ActiveTeam ?? 0;
+  const teamBusiness = dashboardData?.[0]?.TeamBusiness ?? (leftBiz + rightBiz);
+  const strongTeamBusiness = dashboardData?.[0]?.StrongTeamBusiness ?? Math.max(leftBiz, rightBiz);
+  const otherLegBusiness = dashboardData?.[0]?.OtherLegBusiness ?? Math.min(leftBiz, rightBiz);
+
+  const recentTransactions = [
+    { id: '#TRX10291', date: '24 Aug 2026', type: 'Daily Trading Income', wallet: 'Income Wallet', amount: '+₹5,250', status: 'Completed', tone: 'success' },
+    { id: '#TRX10277', date: '23 Aug 2026', type: 'Direct Income', wallet: 'Income Wallet', amount: '+₹2,000', status: 'Completed', tone: 'success' },
+    { id: '#TRX10254', date: '22 Aug 2026', type: 'Withdrawal', wallet: 'Income Wallet', amount: '-₹8,000', status: 'Pending', tone: 'warning' },
+    { id: '#TRX10231', date: '21 Aug 2026', type: 'Team Trading Income', wallet: 'Trading Wallet', amount: '+₹3,420', status: 'Completed', tone: 'success' },
+    { id: '#TRX10198', date: '20 Aug 2026', type: 'Deposit', wallet: 'Deposit Wallet', amount: '+₹25,000', status: 'Failed', tone: 'danger' },
+  ];
+
+  // Recent achievements — replace with API rows when available
+  const recentAchievements = [
+    { title: 'Trading Package Activated', sub: 'Elite package unlocked full benefits' },
+    { title: 'Growth Reward G2 Achieved', sub: '₹10,000 reward credited' },
+    { title: '100 Active Team Members', sub: 'Team milestone reached' },
+    { title: `Accelerator ${dashboardData?.[0]?.UserRank || 'V1'} Achieved`, sub: 'First rank unlocked' },
   ];
 
   return (
@@ -1023,9 +1063,10 @@ export default function DashboardPage() {
             );
           })()}
 
+      
           <RankProgress activeRank={dashboardData?.[0]?.UserRank} NextRank={dashboardData?.[0]?.NextRank} totQualifyRnk={dashboardData?.[0]?.totQualifyRnk} />
 
-   
+
 
           {/* QUICK ACTIONS */}
           <div className="dx-section-head mt-4 mb-3">
@@ -1045,86 +1086,69 @@ export default function DashboardPage() {
             ))}
           </div>
 
-        
 
-          {/* RECENT ACHIEVEMENTS + NOTIFICATIONS */}
+
+          {/* RANK & PACKAGE */}
+          <div className="dx-section-head mb-3">
+            <h5 className="dx-section-title">Accelerator Rank</h5>
+            <div className="dx-section-sub">Your premium rank achievement system</div>
+          </div>
           <div className="row g-3 mb-4">
-            <div className="col-lg-6">
+            <div className="col-lg-6"> 
               <div className="dx-card h-100">
-                <div className="fw-bold mb-3 dx-ink">Recent Achievements</div>
-                <div className="d-flex flex-column gap-2">
-                  {achievements.map((a, i) => (
-                    <div key={i} className="dx-achieve-row">
-                      <span className="dx-achieve-check">
-                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><polyline points="2,8 5.5,11.5 14,3.5" stroke="#0d9488" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      </span>
-                      <div>
-                        <div className="dx-achieve-title">{a.title}</div>
-                        <div className="dx-achieve-sub">{a.sub}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                <div className="dx-card-title mb-1">Your Rank Journey</div>
+                <div className="dx-card-sub mb-3">Your premium rank achievement system</div>
+                <div className="d-flex align-items-center gap-4 flex-wrap">
+                  <CircularGauge
+                    percent={rankLevels.find(r => r.status === 'current')?.progress || 0}
+                    size={110} stroke={9} colorFrom="#5eead4" colorTo="#0d9488" gradId="rankGrad"
+                    centerTop={dashboardData?.[0]?.UserRank || 'V1'}
+                    centerBottom={`${rankLevels.find(r => r.status === 'current')?.progress || 0}%`}
+                  />
+                  <div className="flex-grow-1">
+                    <div className="dx-row"><div className="dx-row-label">Current Business</div><div className="dx-row-value">₹{Number(dashboardData?.[0]?.TeamBusiness || 0).toLocaleString('en-IN')}</div></div>
+                    <div className="dx-row"><div className="dx-row-label">Next Rank</div><div className="dx-row-value">{dashboardData?.[0]?.NextRank || 'V2'}</div></div>
+                    <div className="dx-row"><div className="dx-row-label">Required Business</div><div className="dx-row-value">₹10,00,000</div></div>
+                    <div className="dx-row"><div className="dx-row-label">Remaining</div><div className="dx-row-value">₹2,50,000</div></div>
+                  </div>
+                </div> 
+            </div>
             </div>
 
             <div className="col-lg-6">
-              <div className="dx-card h-100">
-                <div className="fw-bold mb-3 dx-ink">Notifications</div>
-                <div className="dx-notif-list">
-                  {notificationList && notificationList.length > 0 ? (
-                    notificationList.slice(0, 5).map((n, i) => (
-                      <div key={(n.URID || i) + i} className={`dx-notif-card ${n.Seen ? '' : 'unseen'}`}>
-                        <div className="d-flex justify-content-between gap-2">
-                          <div className="small dx-ink">{n.AdminRemarks || ''}</div>
-                          <div className="small dx-muted flex-shrink-0">{n.Amount || ''}</div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <>
-                      <div className="dx-notif-card">
-                        <div className="d-flex align-items-start gap-2">
-                          <span className="dx-notif-ic">🔔</span>
-                          <div>
-                            <div className="fw-semibold small dx-ink">Congratulations</div>
-                            <div className="small dx-muted">You qualified for Growth Reward {growthLevels[activeGrowthIdx]?.level}.</div>
-                            <div className="dx-mini-stat-label mt-1">2 hours ago</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="dx-notif-card">
-                        <div className="d-flex align-items-start gap-2">
-                          <span className="dx-notif-ic">⚡</span>
-                          <div>
-                            <div className="fw-semibold small dx-ink">Rank Progress</div>
-                            <div className="small dx-muted">You are {rankLevels.find(r => r.status === 'current')?.progress || 0}% toward {rankLevels.find(r => r.status === 'current')?.rank}.</div>
-                            <div className="dx-mini-stat-label mt-1">5 hours ago</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="dx-notif-card">
-                        <div className="d-flex align-items-start gap-2">
-                          <span className="dx-notif-ic">💰</span>
-                          <div>
-                            <div className="fw-semibold small dx-ink">Income Credited</div>
-                            <div className="small dx-muted">Today's trading income has been added to your Income Wallet.</div>
-                            <div className="dx-mini-stat-label mt-1">1 day ago</div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
+       <div className="dx-card h-100">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div className="dx-card-title">Trading Package</div>
+                  <span className="dx-badge-soft">${dashboardData?.[0]?.TotalInvestment || "0.00"}</span>
+                </div>
+
+                <div className="d-flex justify-content-center my-3 position-relative">
+                  <CircularGauge percent={visualPercent} size={120} stroke={9} colorFrom="#0ea5e9" colorTo="#14b8a6" gradId="rg" centerTop={`${visualPercent}%`} centerBottom="used" />
+                </div>
+
+                <div className="row text-center g-2">
+                  <div className="col-4">
+                    <div className="dx-mini-stat-label">Total Income</div>
+                    <div className="fw-bold" style={{ color: "#14b8a6" }}>${(dashboardData?.[0]?.TotalIncome || 0).toFixed(2) || "0.00"}</div>
+                  </div>
+                  <div className="col-4">
+                    <div className="dx-mini-stat-label">Max Limit</div>
+                    <div className="fw-bold" style={{ color: "#f59e0b" }}>${(dashboardData?.[0]?.EarningLimit || 0).toFixed(2) || "0.00"}</div>
+                  </div>
+                  <div className="col-4">
+                    <div className="dx-mini-stat-label">Remaining</div>
+                    <div className="fw-bold" style={{ color: "#10b981" }}>${(dashboardData?.[0]?.RemainingLimit || 0).toFixed(2) || "0.00"}</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-        
+
           {/* INCOME OVERVIEW */}
           <div className="dx-section-head mb-3">
             <h5 className="dx-section-title">Income Overview</h5>
-            <div className="dx-section-sub">Your earnings across all trading income streams</div>
+            <div className="dx-section-sub">Your earnings across all Roventar income streams</div>
           </div>
 
           <div className="row g-3 mb-4">
@@ -1143,8 +1167,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="dx-stat-label">Single Leg Income</div>
                 <div className="dx-stat-value">${dashboardData?.[0]?.SingleSpillIncome || "0.00"}</div>
-                <div className="dx-stat-sub">Today</div>
-                <div className="dx-sparkline"><Sparkline seed={1} /></div>
+               
               </div>
             </div>
 
@@ -1162,8 +1185,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="dx-stat-label">Pair Volume Income</div>
                 <div className="dx-stat-value">${dashboardData?.[0]?.PairVolumeIncome || "0.00"}</div>
-                <div className="dx-stat-sub">This Month</div>
-                <div className="dx-sparkline"><Sparkline seed={2} /></div>
+                
               </div>
             </div>
 
@@ -1181,8 +1203,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="dx-stat-label">Trading Bot Income</div>
                 <div className="dx-stat-value">${dashboardData?.[0]?.TradingBotIncome || "0.00"}</div>
-                <div className="dx-stat-sub">This Month</div>
-                <div className="dx-sparkline"><Sparkline seed={3} /></div>
+                
               </div>
             </div>
 
@@ -1201,8 +1222,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="dx-stat-label">Leadership Recurring Income</div>
                 <div className="dx-stat-value">${dashboardData?.[0]?.LeadershipTradingIncome || "0.00"}</div>
-                <div className="dx-stat-sub">This Month</div>
-                <div className="dx-sparkline"><Sparkline seed={4} /></div>
+               
               </div>
             </div>
 
@@ -1221,8 +1241,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="dx-stat-label">Power Boost Income</div>
                 <div className="dx-stat-value">${dashboardData?.[0]?.PowerBoostIncome || "0.00"}</div>
-                <div className="dx-stat-sub">Current</div>
-                <div className="dx-sparkline"><Sparkline seed={5} /></div>
+                 
               </div>
             </div>
 
@@ -1240,8 +1259,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="dx-stat-label">Reward Income</div>
                 <div className="dx-stat-value">${dashboardData?.[0]?.RewardIncome || "0.00"}</div>
-                <div className="dx-stat-sub">Current Reward</div>
-                <div className="dx-sparkline"><Sparkline seed={6} /></div>
+               
               </div>
             </div>
           </div>
@@ -1249,7 +1267,7 @@ export default function DashboardPage() {
           {/* WALLET OVERVIEW — NEW */}
           <div className="dx-section-head mb-3">
             <h5 className="dx-section-title">Wallet Overview</h5>
-            <div className="dx-section-sub">Manage your XOXO wallet balances</div>
+            <div className="dx-section-sub">Manage your Roventar wallet balances</div>
           </div>
           <div className="row g-3 mb-4">
             {wallets.map((w) => (
@@ -1271,6 +1289,10 @@ export default function DashboardPage() {
           </div>
 
           {/* BOT + SUMMARY */}
+          <div className="dx-section-head mb-3">
+            <h5 className="dx-section-title">AI Trading Engine</h5>
+            <div className="dx-section-sub">Live bot status and your summary report</div>
+          </div>
           <div className="row g-3 mb-4">
             <div className="col-lg-6">
               <div className="dx-card h-100 position-relative overflow-hidden">
@@ -1281,7 +1303,7 @@ export default function DashboardPage() {
                       {shouldBotBeActive && <span className="dx-orb-pulse"></span>}
                     </div>
                     <div>
-                      <div className="fw-bold dx-ink">XOXO AI Engine</div>
+                      <div className="dx-card-title">Roventar AI Engine</div>
                       <div className="d-flex align-items-center gap-2 small dx-muted flex-wrap">
                         <span>Uptime {formatElapsedTime(elapsedSeconds)}</span>
                       </div>
@@ -1293,7 +1315,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
 
-                <p className="small text-white mb-3">
+                <p className="small dx-muted mb-3">
                   AI-driven Forex &amp; Crypto trading engine operating 24/7 — automatically scanning market trends and executing profitable trading opportunities with high-speed precision.
                 </p>
 
@@ -1373,51 +1395,138 @@ export default function DashboardPage() {
 
           {/* BUSINESS OVERVIEW / NETWORK STATUS */}
           <div className="dx-section-head mb-3">
-            <h5 className="dx-section-title">Network Status</h5>
-            <div className="dx-section-sub">Your team's collective downline &amp; business</div>
+            <h5 className="dx-section-title">Business Overview</h5>
+            <div className="dx-section-sub">Your team&apos;s collective trading business</div>
+          </div>
+
+          <div className="row g-3 mb-4 dx-biz-row">
+            <div className="col-6 col-md-4 col-xl">
+              <div className="dx-card dx-biz-card h-100">
+                <StatIcon tone="teal">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9.5" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{totalTeam}</div>
+                <div className="dx-biz-label">Total Team</div>
+                <MiniBars seed={1} />
+              </div>
+            </div>
+            <div className="col-6 col-md-4 col-xl">
+              <div className="dx-card dx-biz-card h-100">
+                <StatIcon tone="green">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
+                    <path d="M19 8v6M22 11h-6" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{activeTeam}</div>
+                <div className="dx-biz-label">Active Team</div>
+                <MiniBars seed={2} />
+              </div>
+            </div>
+            <div className="col-6 col-md-4 col-xl">
+              <div className="dx-card dx-biz-card h-100">
+                <StatIcon tone="blue">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3,17 9,11 13,15 21,7" /><path d="M15 7h6v6" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{'₹'} {inr(teamBusiness)}</div>
+                <div className="dx-biz-label">Team Business</div>
+                <MiniBars seed={3} />
+              </div>
+            </div>
+            <div className="col-6 col-md-4 col-xl">
+              <div className="dx-card dx-biz-card h-100">
+                <StatIcon tone="gold">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{'₹'} {inr(strongTeamBusiness)}</div>
+                <div className="dx-biz-label">Strong Team Business</div>
+                <MiniBars seed={4} />
+              </div>
+            </div>
+            <div className="col-6 col-md-4 col-xl">
+              <div className="dx-card dx-biz-card h-100">
+                <StatIcon tone="teal">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="8" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{'₹'} {inr(otherLegBusiness)}</div>
+                <div className="dx-biz-label">Other Leg Business</div>
+                <MiniBars seed={5} />
+              </div>
+            </div>
+          </div>
+
+          {/* DIRECT TEAM PERFORMANCE */}
+          <div className="dx-section-head mb-3">
+            <h5 className="dx-section-title">Direct Team Performance</h5>
+            <div className="dx-section-sub">Track your directly sponsored members</div>
           </div>
 
           <div className="row g-3 mb-4">
             <div className="col-6 col-md-3">
               <div className="dx-card dx-biz-card h-100">
-                <StatIcon tone="gold"><span style={{ fontSize: 17 }}>🎯</span></StatIcon>
-                <div className="dx-biz-value mt-3">{dashboardData?.[0]?.DirectIds || 0}</div>
-                <div className="dx-stat-label">Direct Downline</div>
-                <div className="dx-biz-sub">Business ${(dashboardData?.[0]?.DirectBusiness ?? dashboardData?.[0]?.DirectBussiness ?? 0).toFixed(2)}</div>
-                <MiniBars seed={1} />
+                <StatIcon tone="blue">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{dashboardData?.[0]?.TotalDirect ?? 0}</div>
+                <div className="dx-biz-label">Total Direct</div>
               </div>
             </div>
 
             <div className="col-6 col-md-3">
               <div className="dx-card dx-biz-card h-100">
-                <StatIcon tone="blue"><span style={{ fontSize: 17 }}>◀</span></StatIcon>
-                <div className="dx-biz-value mt-3">{dashboardData?.[0]?.LeftTeam || 0}</div>
-                <div className="dx-stat-label">Left Downline</div>
-                <div className="dx-biz-sub">Business ${(dashboardData?.[0]?.LeftBussiness || 0).toFixed(2)}</div>
-                <MiniBars seed={2} />
+                <StatIcon tone="green">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
+                    <path d="M19 8v6M22 11h-6" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">{dashboardData?.[0]?.ActiveDirect ?? 0}</div>
+                <div className="dx-biz-label">Active Direct</div>
               </div>
             </div>
 
             <div className="col-6 col-md-3">
               <div className="dx-card dx-biz-card h-100">
-                <StatIcon tone="green"><span style={{ fontSize: 17 }}>▶</span></StatIcon>
-                <div className="dx-biz-value mt-3">{dashboardData?.[0]?.RightTeam || 0}</div>
-                <div className="dx-stat-label">Right Downline</div>
-                <div className="dx-biz-sub">Business ${(dashboardData?.[0]?.RightBussiness || 0).toFixed(2)}</div>
-                <MiniBars seed={3} />
+                <StatIcon tone="teal">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-value mt-3">&#8377;{Number(dashboardData?.[0]?.DirectBusiness ?? dashboardData?.[0]?.DirectBussiness ?? 0).toLocaleString('en-IN')}</div>
+                <div className="dx-biz-label">Direct Business</div>
               </div>
             </div>
 
             <div className="col-6 col-md-3">
               <div className="dx-card dx-biz-card h-100">
-                <StatIcon tone="teal"><span style={{ fontSize: 17 }}>Σ</span></StatIcon>
-                <div className="dx-biz-value mt-3">{(dashboardData?.[0]?.LeftTeam || 0) + (dashboardData?.[0]?.RightTeam || 0)}</div>
-                <div className="dx-stat-label">Total Downline</div>
-                <div className="dx-biz-sub">Business ${((dashboardData?.[0]?.LeftBussiness || 0) + (dashboardData?.[0]?.RightBussiness || 0)).toFixed(2)}</div>
-                <MiniBars seed={4} />
+                <StatIcon tone="gold">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" width="19" height="19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 3v18h18" />
+                    <rect x="7" y="12" width="3" height="6" /><rect x="12" y="8" width="3" height="10" /><rect x="17" y="5" width="3" height="13" />
+                  </svg>
+                </StatIcon>
+                <div className="dx-biz-label mt-3 mb-2">Level Open</div>
+                <span className="dx-pill-active">
+                  <span className="dx-status-dot on"></span>
+                  LEVEL {dashboardData?.[0]?.LevelOpen ?? 0} OPEN
+                </span>
               </div>
             </div>
           </div>
+
 
           {/* GROWTH REWARDS BANNER — NEW */}
           <div className="dx-section-head mb-3">
@@ -1468,6 +1577,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
 
+                <div className="dx-eyebrow mb-2">Milestone Details</div>
                 <div className="table-responsive">
                   <table className="table dx-table align-middle mb-0">
                     <thead>
@@ -1503,28 +1613,7 @@ export default function DashboardPage() {
 
           {/* ACCELERATOR RANK + RANK JOURNEY — NEW */}
           <div className="row g-3 mb-4">
-            <div className="col-lg-5">
-              <div className="dx-card h-100">
-                <div className="fw-bold mb-1 dx-ink">Accelerator Rank</div>
-                <div className="small text-white mb-3">Your premium rank achievement system</div>
-                <div className="d-flex align-items-center gap-4 flex-wrap">
-                  <CircularGauge
-                    percent={rankLevels.find(r => r.status === 'current')?.progress || 0}
-                    size={110} stroke={9} colorFrom="#5eead4" colorTo="#0d9488" gradId="rankGrad"
-                    centerTop={dashboardData?.[0]?.UserRank || 'V1'}
-                    centerBottom={`${rankLevels.find(r => r.status === 'current')?.progress || 0}%`}
-                  />
-                  <div className="flex-grow-1">
-                    <div className="dx-row"><div className="dx-row-label">Current Business</div><div className="dx-row-value">₹{Number(dashboardData?.[0]?.TeamBusiness || 0).toLocaleString('en-IN')}</div></div>
-                    <div className="dx-row"><div className="dx-row-label">Next Rank</div><div className="dx-row-value">{dashboardData?.[0]?.NextRank || 'V2'}</div></div>
-                    <div className="dx-row"><div className="dx-row-label">Required Business</div><div className="dx-row-value">₹10,00,000</div></div>
-                    <div className="dx-row"><div className="dx-row-label">Remaining</div><div className="dx-row-value">₹2,50,000</div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-7">
+            <div className="col-lg-6">
               <div className="dx-card h-100">
                 <div className="fw-bold mb-3 dx-ink">Your Rank Journey</div>
                 <div className="dx-rank-track mb-3">
@@ -1540,8 +1629,8 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="dx-next-action">
-                  <div className="dx-eyebrow-light mb-1">Your Next Best Action</div>
-                  <div className="fw-bold dx-ink mb-1">Grow your team business by ₹2,50,000</div>
+                  <div className="dx-eyebrow-light mb-1">Your Next Milestone</div>
+                  <div className="dx-card-title mb-1">Grow your team business by ₹2,50,000</div>
                   <div className="small dx-muted mb-2">You are only 25% away from Accelerator {dashboardData?.[0]?.NextRank || 'V2'}.</div>
                   <div className="d-flex flex-wrap gap-2 mb-3">
                     <span className="dx-tag-pill">Build active team</span>
@@ -1552,34 +1641,70 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
+        
+        <div className="col-lg-6"> 
+          {/* RECENT TRANSACTIONS */}
+          <div className="dx-card mb-4" id="transactions">
+            <div className="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+              <div className="dx-section-head">
+                <h5 className="dx-section-title">Recent Transactions</h5>
+                <div className="dx-section-sub">Your latest wallet activity</div>
+              </div> 
+            </div>
+            <div className="dx-table-wrap">
+              <table className="dx-table-flat">
+                <thead>
+                  <tr>
+                    <th>Date</th><th>Transaction ID</th><th>Type</th><th>Wallet</th><th>Amount</th><th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentTransactions.map((t) => (
+                    <tr key={t.id}>
+                      <td>{t.date}</td>
+                      <td className="dx-mono">{t.id}</td>
+                      <td>{t.type}</td>
+                      <td>{t.wallet}</td>
+                      <td className={t.amount.startsWith('-') ? 'dx-amount-down' : 'dx-amount-up'}>{t.amount}</td>
+                      <td><span className={`dx-badge ${t.tone}`}>{t.status}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
           </div>
 
+      
+    
+
           {/* BOTTOM ROW */}
+          <div className="dx-section-head mb-3">
+            <h5 className="dx-section-title">Support &amp; Updates</h5>
+            <div className="dx-section-sub">Assistant help and the latest Roventar notifications</div>
+          </div>
           <div className="row g-3">
             <div className="col-lg-4">
               <div className="dx-card h-100">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <div className="fw-bold dx-ink">Trading Bot Package</div>
-                  <span className="dx-badge-soft">${dashboardData?.[0]?.TotalInvestment || "0.00"}</span>
+                  <div className="dx-card-title">Recent Achievements</div>
+                  <span className="dx-badge-soft">{recentAchievements.length}</span>
                 </div>
-
-                <div className="d-flex justify-content-center my-3 position-relative">
-                  <CircularGauge percent={visualPercent} size={120} stroke={9} colorFrom="#0ea5e9" colorTo="#14b8a6" gradId="rg" centerTop={`${visualPercent}%`} centerBottom="used" />
-                </div>
-
-                <div className="row text-center g-2">
-                  <div className="col-4">
-                    <div className="dx-mini-stat-label">Total Income</div>
-                    <div className="fw-bold" style={{ color: "#14b8a6" }}>${(dashboardData?.[0]?.TotalIncome || 0).toFixed(2) || "0.00"}</div>
-                  </div>
-                  <div className="col-4">
-                    <div className="dx-mini-stat-label">Max Limit</div>
-                    <div className="fw-bold" style={{ color: "#f59e0b" }}>${(dashboardData?.[0]?.EarningLimit || 0).toFixed(2) || "0.00"}</div>
-                  </div>
-                  <div className="col-4">
-                    <div className="dx-mini-stat-label">Remaining</div>
-                    <div className="fw-bold" style={{ color: "#10b981" }}>${(dashboardData?.[0]?.RemainingLimit || 0).toFixed(2) || "0.00"}</div>
-                  </div>
+                <div className="d-flex flex-column gap-2">
+                  {recentAchievements.map((a) => (
+                    <div className="dx-achieve-row" key={a.title}>
+                      <div className="dx-achieve-check">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                          <polyline points="2,8 5.5,11.5 14,3.5" stroke="#0d9488" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="dx-achieve-title">{a.title}</div>
+                        <div className="dx-achieve-sub">{a.sub}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1593,8 +1718,8 @@ export default function DashboardPage() {
             <div className="col-lg-4">
               <div className="dx-card h-100">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <div className="fw-bold dx-ink">📰 XOXO Notification</div>
-                  <div className="small dx-muted">{notificationCount} items</div>
+                  <div className="dx-card-title">Notifications</div>
+                  <div className="dx-card-sub">{notificationCount} items</div>
                 </div>
 
                 <div className="dx-notif-list">
@@ -1637,355 +1762,10 @@ export default function DashboardPage() {
             </div>
           </div>
 
+        
         </div>
       </div>
 
-      <style jsx global>{`
-        :root {
-          --dx-bg: #eef2f6;
-          --dx-card: #ffffff;
-          --dx-border: #e7ecf1;
-          --dx-ink: #0f172a;
-          --dx-muted: #64748b;
-          --dx-teal: #14b8a6;
-          --dx-teal-dark: #0d9488;
-          --dx-track: #eef2f6;
-          --dx-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.05);
-          --dx-radius: 16px;
-          --dx-soft: #f8fafc;
-        }
-
-        [data-theme="dark"] {
-          --dx-bg: #0b1220;
-          --dx-card: #121a2b;
-          --dx-border: #1f2937;
-          --dx-ink: #e8edf5;
-          --dx-muted: #94a3b8;
-          --dx-teal: #2dd4bf;
-          --dx-teal-dark: #14b8a6;
-          --dx-track: #fff;
-          --dx-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
-          --dx-soft: #17213380;
-        }
-
-  [data-theme="dark"]  .dx-btn-dark{
-  color: #ffffff;
-  }
-   [data-theme="dark"] .dx-growth-title [data-theme="dark"] .dx-btn-dark{
-  color: #ffffff;
-  } 
-        .dx-wrap {
-          padding: 20px;
-          color: var(--dx-ink);
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-          transition: background .2s ease, color .2s ease;
-          min-height: 100%;
-        }
-        @media (max-width: 576px) { .dx-wrap { padding: 12px; } }
-
-        .dx-ink { color: var(--dx-ink) !important; }
-
- 
-
-        .dx-card {
-          background: var(--dx-card);
-          border: 1px solid var(--dx-border);
-          border-radius: 18px;
-          box-shadow: var(--dx-shadow);
-          padding: 22px 20px;
-          transition: transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
-        }
-        .dx-stat-card[role="button"]:hover, .dx-card[role="button"]:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 4px 10px rgba(15,23,42,.06), 0 16px 32px rgba(15,23,42,.08);
-          cursor: pointer;
-        }
-
-        .dx-section-head { display: flex; flex-direction: column; }
-        .dx-section-title { font-weight: 700; margin: 0; color: var(--dx-ink); font-size: 18px; }
-        .dx-section-sub { font-size: 12.5px; color: var(--dx-muted); }
-
-        /* Icon badges — tone variants matching reference cards */
-        .dx-icon-badge {
-          width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
-          display: flex; align-items: center; justify-content: center;
-        }
-        .dx-icon-blue { background: #e8f1fd; color: #2563eb; }
-        .dx-icon-teal { background: #e3f8f4; color: #0d9488; }
-        .dx-icon-green { background: #e6f9f1; color: #059669; }
-        .dx-icon-gold { background: #fef6e6; color: #d97706; }
-        [data-theme="dark"] .dx-icon-blue { background: rgba(37,99,235,.18); color: #7cabff; }
-        [data-theme="dark"] .dx-icon-teal { background: rgba(13,148,136,.22); color: #5eead4; }
-        [data-theme="dark"] .dx-icon-green { background: rgba(5,150,105,.2); color: #6ee7b7; }
-        [data-theme="dark"] .dx-icon-gold { background: rgba(217,119,6,.2); color: #fbbf6d; }
-
-        .dx-icon-circle {
-          width: 70px; height: 70px; border-radius: 50%;
-          background: linear-gradient(135deg, rgba(20,184,166,0.15), rgba(14,165,233,0.15));
-          display: flex; align-items: center; justify-content: center;
-        }
-
-        .dx-stat-label { font-size: 13px; color: var(--dx-muted); margin-bottom: 6px; }
-        .dx-stat-value { font-size: 24px; font-weight: 800; color: var(--dx-ink); letter-spacing: -.4px; line-height: 1.15; }
-        .dx-stat-sub { font-size: 11.5px; color: #94a3b8; margin-top: 2px; margin-bottom: 6px; }
-
-        .dx-badge-up {
-          font-size: 11px; font-weight: 700; color: #16a34a;
-          background: #eafcf3; border-radius: 999px; padding: 4px 9px; white-space: nowrap;
-        }
-        [data-theme="dark"] .dx-badge-up { background: rgba(22,163,74,.18); color: #6ee7b7; }
-        .dx-badge-gold {
-          font-size: 11px; font-weight: 700; color: #b45309;
-          background: #fef6e6; border-radius: 999px; padding: 4px 9px; white-space: nowrap;
-        }
-        .dx-badge-soft {
-          font-size: 12px; font-weight: 600; color: var(--dx-teal-dark);
-          background: rgba(20,184,166,0.1); border-radius: 999px; padding: 5px 12px;
-          display: inline-flex; align-items: center; gap: 6px;
-        }
-        .dx-badge-chip {
-          font-size: 11.5px; font-weight: 600; color: var(--dx-ink);
-          background: var(--dx-soft); border: 1px solid var(--dx-border);
-          border-radius: 999px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px;
-        }
-        .dx-badge-chip.success { color: #16a34a; background: #eafcf3; border-color: rgba(22,163,74,.2); }
-        [data-theme="dark"] .dx-badge-chip.success { color: #6ee7b7; background: rgba(22,163,74,.16); }
-
-        .dx-pill-active {
-          font-size: 11px; font-weight: 700; color: #16a34a;
-          background: #eafcf3; border-radius: 999px; padding: 4px 10px;
-          display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0;
-        }
-        .dx-pill-active.off { color: #64748b; background: #f1f5f9; }
-        [data-theme="dark"] .dx-pill-active { background: rgba(22,163,74,.18); color: #6ee7b7; }
-        [data-theme="dark"] .dx-pill-active.off { background: #1c2637; color: var(--dx-muted); }
-
-        .dx-sparkline { margin-top: 10px; height: 30px; }
-        .dx-sparkline-svg { width: 100%; height: 100%; display: block; opacity: .9; }
-
-        .dx-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--dx-muted); }
-        .dx-eyebrow-light { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: rgba(255,255,255,.7); }
-
-        .dx-mini-stat { background: var(--dx-soft); border-radius: 10px; padding: 8px 4px; }
-        .dx-mini-stat-value { font-size: 15px; font-weight: 800; color: var(--dx-ink); }
-        .dx-mini-stat-label { font-size: 10.5px; color: var(--dx-muted); }
-
-        /* Business / network overview cards */
-        .dx-biz-card { padding: 20px 18px; }
-        .dx-biz-value { font-size: 26px; font-weight: 800; color: var(--dx-ink); letter-spacing: -.4px; }
-        .dx-biz-sub { font-size: 12px; color: var(--dx-muted); margin-top: 2px; margin-bottom: 12px; }
-        .dx-bars { display: flex; align-items: flex-end; gap: 5px; height: 30px; margin-top: 4px; }
-        .dx-bar { flex: 1; border-radius: 3px; background: var(--dx-track); min-height: 6px; }
-        .dx-bar.active { background: linear-gradient(180deg, #14b8a6, #0d9488); }
-
-        .dx-orb {
-          width: 52px; height: 52px; border-radius: 50%; font-size: 26px;
-          display: flex; align-items: center; justify-content: center;
-          background: linear-gradient(135deg, rgba(20,184,166,.15), rgba(14,165,233,.15));
-        }
-        .dx-orb-pulse {
-          position: absolute; inset: -4px; border-radius: 50%;
-          border: 2px solid var(--dx-teal); opacity: .5; animation: dxpulse 1.6s ease-out infinite;
-        }
-        @keyframes dxpulse { 0% { transform: scale(.9); opacity:.6 } 100% { transform: scale(1.35); opacity:0 } }
-
-        .dx-status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-        .dx-status-dot.on { background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.18); }
-        .dx-status-dot.off { background: #94a3b8; }
-
-        .dx-btn-primary {
-          background: linear-gradient(135deg, #0d9488, #0ea5e9);
-          color: #fff; border: none; border-radius: 10px;
-        }
-        .dx-btn-primary:disabled { opacity: .5; }
-        .dx-btn-primary:not(:disabled):hover { filter: brightness(1.05); color: #fff; }
-
-        .dx-btn-outline {
-          background: transparent; border: 1px solid var(--dx-border); color: var(--dx-ink);
-          border-radius: 10px; font-weight: 600; font-size: 13px;
-        }
-        .dx-btn-outline:hover { background: var(--dx-soft); color: var(--dx-ink); }
-
-        .dx-btn-dark {
-          background: var(--dx-ink); 
-          color: var(--dx-card); border: none; border-radius: 10px;
-          font-weight: 700; padding: 9px 18px; font-size: 13.5px;
-        }
-        .dx-btn-dark:hover { filter: brightness(1.15); color: var(--dx-card); }
-
-        .dx-notif-bar {
-          margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-          background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(14,165,233,0.08));
-          border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 12px 14px;
-        }
-        .dx-timer-box {
-          display: flex; align-items: center; gap: 8px; background: rgba(16,185,129,0.12);
-          padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #047857;
-        }
-        [data-theme="dark"] .dx-timer-box { color: #6ee7b7; }
-
-        .dx-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--dx-border); font-size: 13px; }
-        .dx-row:last-child { border-bottom: none; }
-        .dx-row-label { color: var(--dx-muted); }
-        .dx-row-value { font-weight: 700; color: var(--dx-ink); }
-
-        .dx-notif-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 4px; }
-        .dx-notif-card { padding: 10px 12px; border-radius: 10px; background: var(--dx-soft); }
-        .dx-notif-card.unseen { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.18); }
-        .dx-notif-ic { font-size: 15px; line-height: 1; }
-        .dx-tag { font-size: 10px; font-weight: 700; letter-spacing: .3px; }
-
-        .dx-ann {
-          display: flex; align-items: center; gap: 10px; background: var(--dx-card);
-          border: 1px solid var(--dx-border); border-radius: 999px; padding: 8px 14px; overflow: hidden;
-        }
-        .dx-ann-badge { font-size: 11px; font-weight: 700; color: #ef4444; background: #fef2f2; border-radius: 999px; padding: 3px 10px; flex-shrink: 0; }
-        [data-theme="dark"] .dx-ann-badge { background: rgba(239,68,68,.18); }
-        .dx-ann-ticker { overflow: hidden; flex: 1; }
-        .dx-ann-track { display: flex; gap: 60px; white-space: nowrap; animation: dxmarquee 18s linear infinite; } 
-        .dx-ann-item { font-size: 13px; color: #000; }
-        .dx-ann-close { background: none; border: none; color: var(--dx-muted); font-size: 13px; flex-shrink: 0; cursor: pointer; }
-        @keyframes dxmarquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
-
-        .dx-ref-link { font-family: monospace; font-size: 12px; background: var(--dx-soft); border: 1px dashed var(--dx-border); border-radius: 8px; padding: 8px 10px; word-break: break-all; color: var(--dx-ink); }
-        .dx-level-box { border: 1px solid; border-radius: 10px; padding: 8px; }
-        .dx-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--dx-teal); flex-shrink: 0; }
-
-        .dx-gradient-text {
-          background: linear-gradient(135deg, #14b8a6, #0ea5e9);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .dx-gradient-text-alt {
-          background: linear-gradient(135deg, #f59e0b, #10b981);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-
-        .dx-tip-box { background: rgba(14,165,233,0.08); color: #0369a1; border-radius: 10px; padding: 12px; font-size: 12.5px; text-align: left; }
-        [data-theme="dark"] .dx-tip-box { background: rgba(14,165,233,0.14); color: #7dd3fc; }
-
-        .dx-overlay {
-          position: fixed; inset: 0; background: rgba(15,23,42,0.55); backdrop-filter: blur(6px);
-          z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 16px;
-        }
-        .dx-modal {
-          position: relative; width: 100%; max-width: 460px; background: var(--dx-card);
-          border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.3);
-          animation: dxfadeup .35s ease-out;
-        }
-        .dx-modal-celebrate { animation: dxcelebrate .5s cubic-bezier(.68,-.55,.265,1.55); }
-        .dx-modal-bar { height: 4px; }
-        .dx-modal-close {
-          position: absolute; top: 10px; right: 12px; background: none; border: none;
-          font-size: 18px; color: var(--dx-muted); cursor: pointer; z-index: 2;
-        }
-        .dx-modal-close:hover { color: var(--dx-ink); }
-
-        @keyframes dxfadeup { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes dxcelebrate {
-          0% { opacity: 0; transform: scale(.75) rotate(-8deg); }
-          60% { opacity: 1; transform: scale(1.05) rotate(2deg); }
-          100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-
-        /* ---------- NEW: Quick Actions ---------- */
-        .dx-quick-row {
-          display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px;
-        }
-        @media (max-width: 992px) { .dx-quick-row { grid-template-columns: repeat(4, 1fr); } }
-        @media (max-width: 576px) { .dx-quick-row { grid-template-columns: repeat(2, 1fr); } }
-        .dx-quick-btn {
-          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-          background: var(--dx-card); border: 1px solid var(--dx-border); border-radius: 14px;
-          padding: 16px 8px; cursor: pointer; transition: all .15s ease;
-        }
-        .dx-quick-btn:hover { transform: translateY(-2px); box-shadow: var(--dx-shadow); }
-        .dx-quick-btn.active { border-color: var(--dx-teal); box-shadow: 0 0 0 3px rgba(20,184,166,.12); }
-        .dx-quick-icon {
-          width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-          background: rgba(20,184,166,.12); color: var(--dx-teal-dark);
-        }
-        .dx-quick-label { font-size: 12px; font-weight: 600; color: var(--dx-ink); text-align: center; }
-
-        /* ---------- NEW: Achievements ---------- */
-        .dx-achieve-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--dx-border); border-radius: 12px; background: var(--dx-soft); }
-        .dx-achieve-check { width: 22px; height: 22px; border-radius: 50%; background: rgba(20,184,166,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-        .dx-achieve-title { font-size: 13px; font-weight: 700; color: var(--dx-ink); }
-        .dx-achieve-sub { font-size: 11.5px; color: var(--dx-muted); }
-
-        /* ---------- NEW: Profile strip ---------- */
-        .dx-profile-strip { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .dx-avatar {
-          width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
-          background: linear-gradient(135deg, #14b8a6, #0d9488); color: #fff;
-          display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;
-        }
-
-        /* ---------- NEW: Wallets ---------- */
-        .dx-wallet-card { display: flex; flex-direction: column; }
-
-        /* ---------- NEW: Gauge ---------- */
-        .dx-gauge-wrap { position: relative; }
-        .dx-gauge-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .dx-gauge-top { font-size: 14px; font-weight: 800; color: var(--dx-ink); }
-        .dx-gauge-bottom { font-size: 10.5px; color: var(--dx-muted); margin-top: 2px; text-align: center; }
-
-        /* ---------- NEW: Growth banner ---------- */
-        .dx-growth-banner {
-          background: var(--dx-card);
-          border-radius: 18px; padding: 26px 24px; color: #fff; box-shadow: var(--dx-shadow);
-        }
-        .dx-growth-title { font-size: 22px; font-weight: 800; color: #5eead4; }
-        .dx-growth-label { font-size: 11px; color: rgba(255,255,255,.65); margin-bottom: 3px; }
-        .dx-growth-value { font-size: 15px; font-weight: 700; color: #fff; }
-
-        /* ---------- NEW: Stepper ---------- */
-        .dx-stepper { display: flex; align-items: center; }
-        .dx-stepper-item { display: flex; align-items: center; flex: 1; }
-        .dx-stepper-item:last-child { flex: 0; }
-        .dx-stepper-dot {
-          width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-          display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;
-          background: var(--dx-soft); color: var(--dx-muted); border: 2px solid var(--dx-border);
-        }
-        .dx-stepper-dot.done { background: var(--dx-teal-dark); border-color: var(--dx-teal-dark); color: #fff; }
-        .dx-stepper-dot.current { background: var(--dx-card); border-color: var(--dx-teal); color: var(--dx-teal-dark); box-shadow: 0 0 0 4px rgba(20,184,166,.15); }
-        .dx-stepper-line { height: 2px; flex: 1; background: var(--dx-border); margin: 0 6px; }
-        .dx-stepper-line.done { background: var(--dx-teal-dark); }
-
-        /* ---------- NEW: Table ---------- */
-        .dx-table { color: var(--dx-ink); font-size: 13px; }
-        .dx-table thead th { color: var(--dx-muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; border-bottom: 1px solid var(--dx-border); padding-bottom: 10px; }
-        .dx-table tbody td { border-bottom: 1px solid var(--dx-border); padding: 12px 8px; color: var(--dx-ink); }
-        .dx-table tbody tr:last-child td { border-bottom: none; }
-        .dx-status-chip { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 4px 10px; display: inline-block; }
-        .dx-status-chip.qualified { background: #eafcf3; color: #16a34a; }
-        .dx-status-chip.inprogress { background: rgba(14,165,233,.12); color: #0284c7; }
-        .dx-status-chip.upcoming { background: var(--dx-soft); color: var(--dx-muted); }
-        [data-theme="dark"] .dx-status-chip.qualified { background: rgba(22,163,74,.18); color: #6ee7b7; }
-        [data-theme="dark"] .dx-status-chip.inprogress { background: rgba(14,165,233,.18); color: #7dd3fc; }
-
-        /* ---------- NEW: Rank journey tiles ---------- */
-        .dx-rank-track { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        @media (max-width: 768px) { .dx-rank-track { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 480px) { .dx-rank-track { grid-template-columns: repeat(2, 1fr); } }
-        .dx-rank-tile { border: 1px solid var(--dx-border); border-radius: 12px; padding: 14px 10px; text-align: center; background: var(--dx-soft); }
-        .dx-rank-tile.current { border-color: var(--dx-teal); background: rgba(20,184,166,.08); }
-        .dx-rank-tile-name { font-size: 16px; font-weight: 800; color: var(--dx-ink); }
-        .dx-rank-tile-biz { font-size: 11px; color: var(--dx-muted); margin-bottom: 6px; }
-        .dx-rank-tile-status { font-size: 10.5px; font-weight: 700; }
-        .dx-rank-tile-status.achieved { color: #16a34a; }
-        .dx-rank-tile-status.current { color: #0d9488; }
-        .dx-rank-tile-status.upcoming { color: var(--dx-muted); }
-
-        .dx-next-action { border: 1px dashed var(--dx-border); border-radius: 14px; padding: 16px; background: var(--dx-soft); }
-        .dx-tag-pill { font-size: 11px; font-weight: 600; background: var(--dx-card); border: 1px solid var(--dx-border); color: var(--dx-ink); padding: 5px 10px; border-radius: 999px; }
-
-        @media (max-width: 480px) {
-          .dx-stat-value { font-size: 18px; }
-          .dx-card { padding: 14px; }
-          .dx-growth-title { font-size: 18px; }
-        }
-      `}</style>
     </>
   );
 }

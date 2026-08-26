@@ -7,7 +7,7 @@ export default function RankProgress({
   total = 7,
   activeRank = "No Rank",
   description = "Welcome back to your Roventar ecosystem. Monitor your trading performance, team growth and reward progress from one place.",
-  title = "Rank Progress",
+  title = "Good Morning UserName",
 }) {
   const pct = Math.min(100, Math.max(0, Math.round((totQualifyRnk / total) * 100)));
 
@@ -204,7 +204,8 @@ export default function RankProgress({
           {/* LEFT SIDE */}
           <div style={styles.left}>
             <div style={styles.eyebrow}>
-              <TrophyIcon />
+        
+              <div class="dx-avatar"><TrophyIcon /></div>
               <span>ROVENTAR ECOSYSTEM</span>
             </div>
             <h3 style={styles.title}>{title}</h3>
@@ -218,6 +219,7 @@ export default function RankProgress({
             <div className="mb-4">
               <div className=" flex-grow-1">
                 <div className=" d-flex flex-wrap gap-2">
+                  
                   <span className=" dx-badge-chip">Rank MANAGER</span>
                   <span className=" dx-badge-chip success">
                     <svg width="11" height="11" viewBox="0 0 16 16" fill="none" className="">
@@ -303,24 +305,24 @@ function CheckIcon() {
 
 function TrophyIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      width="15"
-      height="15"
-      fill="none"
-      stroke={ICON_ACCENT}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{ display: "block", flexShrink: 0 }}
-      aria-hidden="true"
-    >
-      <path d="M8 21h8" />
-      <path d="M12 17v4" />
-      <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
-      <path d="M17 5h2.5A1.5 1.5 0 0 1 21 6.5v0A3.5 3.5 0 0 1 17.5 10H17" />
-      <path d="M7 5H4.5A1.5 1.5 0 0 0 3 6.5v0A3.5 3.5 0 0 0 6.5 10H7" />
-    </svg>
+<svg
+  viewBox="0 0 24 24"
+  width="15"
+  height="15"
+  fill="none"
+  stroke="#ffffff"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  style={{ display: "block", flexShrink: 0 }}
+  aria-hidden="true"
+>
+  <path d="M8 21h8" />
+  <path d="M12 17v4" />
+  <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
+  <path d="M17 5h2.5A1.5 1.5 0 0 1 21 6.5v0A3.5 3.5 0 0 1 17.5 10H17" />
+  <path d="M7 5H4.5A1.5 1.5 0 0 0 3 6.5v0A3.5 3.5 0 0 0 6.5 10H7" />
+</svg>
   );
 }
 

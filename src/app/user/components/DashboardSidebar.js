@@ -475,8 +475,8 @@ export default function DashboardHeader({ sidebarOpen, setSidebarOpen }) {
               style={{
                 borderRadius: "999px",
                 background: "#E1F3F3",
-                border: "1px solid #1D9A40",
-                color: "#1D9A40",
+                border: "1px solid #1d819a",
+                color: "#1d5e9a",
                 padding: "8px 14px",
                 display: "inline-flex",
                 alignItems: "center",

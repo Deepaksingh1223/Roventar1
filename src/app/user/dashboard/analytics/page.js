@@ -567,7 +567,7 @@ export default function ArbionEngine() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background:linear-gradient(135deg, #2196F3, #00BCD4);
+          background:linear-gradient(135deg, #03bdad, #00BCD4);
           color: #fff;
           font-size: 12px;
           font-weight: 600;
