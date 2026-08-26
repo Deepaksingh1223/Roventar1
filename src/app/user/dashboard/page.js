@@ -15,11 +15,13 @@ import { botActivate } from "@/app/redux/slices/fundManagerSlice"
 import { useRouter } from 'next/navigation';
 import XoxoFxChatbot from '../components/Xoxofxchatbot';
 import RankProgress from '../components/RankProgress';
+import { useTheme } from '@/components/ThemeProvider';
 
 
 export default function DashboardPage() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { isDark } = useTheme();
   const chartEarnRef = useRef(null);
   const chartPieRef = useRef(null);
   const chartPortRef = useRef(null);
@@ -49,7 +51,7 @@ export default function DashboardPage() {
   const [botActiveTime, setBotActiveTime] = useState(null);
 
   // Theme (light / dark) — persisted to localStorage
-  const [theme] = useState('dark');
+  const theme = isDark ? 'dark' : 'light';
 
   const BOT_SESSION_KEY = 'xoxoBotActive';
   const BOT_START_KEY = 'xoxoBotStartTime';
@@ -1006,8 +1008,6 @@ export default function DashboardPage() {
         )}
 
         <div className="container-fluid px-0">
- 
-
           {/* ANNOUNCEMENT SECTION */}
           {showAnnouncement && dashboardData?.[0]?.News && (() => {
             const newsText = dashboardData[0].News.replace(/<[^>]*>/g, '');
@@ -1025,30 +1025,7 @@ export default function DashboardPage() {
 
           <RankProgress activeRank={dashboardData?.[0]?.UserRank} NextRank={dashboardData?.[0]?.NextRank} totQualifyRnk={dashboardData?.[0]?.totQualifyRnk} />
 
-    {/* USER PROFILE STRIP */}x 
-          <div className="dx-card dx-profile-strip mb-4">
-            <div className="dx-avatar">{(dashboardData?.[0]?.UserName || 'U').slice(0, 2).toUpperCase()}</div>
-            <div className="flex-grow-1">
-              <div className="fw-bold dx-ink">{dashboardData?.[0]?.UserName || 'User'}</div>
-              <div className="small dx-muted mb-2">User ID: {dashboardData?.[0]?.URID || userURID || '—'}</div>
-              <div className="d-flex flex-wrap gap-2">
-                <span className="dx-badge-chip">Rank {dashboardData?.[0]?.UserRank || 'V1'}</span>
-                <span className="dx-badge-chip success">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><polyline points="2,8 5.5,11.5 14,3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  Trading Package Active
-                </span>
-                <span className="dx-badge-chip success">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><polyline points="2,8 5.5,11.5 14,3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  KYC Verified
-                </span>
-                <span className="dx-badge-chip success">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><polyline points="2,8 5.5,11.5 14,3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  Account Active
-                </span>
-              </div>
-            </div>
-          </div>
-
+   
 
           {/* QUICK ACTIONS */}
           <div className="dx-section-head mt-4 mb-3">
@@ -1708,13 +1685,7 @@ export default function DashboardPage() {
 
         .dx-ink { color: var(--dx-ink) !important; }
 
-        .dx-theme-toggle {
-          display: inline-flex; align-items: center; gap: 8px;
-          background: var(--dx-card); border: 1px solid var(--dx-border); color: var(--dx-ink);
-          border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 600;
-          box-shadow: var(--dx-shadow); cursor: pointer;
-        }
-        .dx-theme-toggle:hover { filter: brightness(1.03); }
+ 
 
         .dx-card {
           background: var(--dx-card);

@@ -12,11 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserId, doUserLogout } from "@/app/api/auth";
 import Link from 'next/link';
 import { FiLogOut } from "react-icons/fi";
+import { useTheme } from '@/components/ThemeProvider';
+import { RiMoonLine, RiSunLine } from 'react-icons/ri';
 
 export default function DashboardHeader({ sidebarOpen, setSidebarOpen }) {
 
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const { isDark, toggleTheme } = useTheme();
   const [showBotPopup, setShowBotPopup] = useState(false);
   const [showRefPopup, setShowRefPopup] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -333,6 +336,17 @@ export default function DashboardHeader({ sidebarOpen, setSidebarOpen }) {
             <span className="dot dg"></span>
             INVITE & EARN
           </div>
+
+          <button
+            type="button"
+            className="dx-theme-toggle"
+            onClick={toggleTheme}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDark ? <RiSunLine aria-hidden="true" /> : <RiMoonLine aria-hidden="true" />}
+            <span>{isDark ? 'Dark mode' : 'Light mode'}</span>
+          </button>
 
         
           <div style={{ position: "relative" }} ref={notifyRef}>

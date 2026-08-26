@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTheme } from '@/components/ThemeProvider';
 
 const KB = {
   // ---------- PLATFORM OVERVIEW ----------
@@ -207,7 +208,46 @@ const C = {
   dotBg: "#5c6c80",
 };
 
+const LIGHT_C = {
+  ...C,
+  bgBase: "#f7fbfc",
+  shadow: "rgba(18, 38, 58, 0.12)",
+  text1: "#12263a",
+  text2: "#647785",
+  text3: "#8a9ba7",
+  primary: "#0e9c98",
+  secondary: "#b8862a",
+  primaryLight: "rgba(24, 199, 194, 0.12)",
+  primaryBorder: "rgba(24, 199, 194, 0.38)",
+  statusBg: "rgba(24, 199, 194, 0.1)",
+  statusText: "#0e716e",
+  statusBorder: "rgba(14, 156, 152, 0.38)",
+  botBg: "#ffffff",
+  botBorder: "#ddebec",
+  userBg: "#18c7c2",
+  userText: "#12263a",
+  typingBg: "#ffffff",
+  typingBorder: "#ddebec",
+  quickBtnBg: "rgba(184, 134, 42, 0.1)",
+  quickBtnBorder: "rgba(184, 134, 42, 0.38)",
+  quickBtnText: "#8a6212",
+  quickBtnHoverBg: "rgba(24, 199, 194, 0.1)",
+  quickBtnHoverBorder: "rgba(14, 156, 152, 0.38)",
+  quickBtnHoverText: "#0e716e",
+  inputBorder: "#ddebec",
+  inputBg: "#ffffff",
+  sendBtnBg: "#18c7c2",
+  sendBtnText: "#12263a",
+  containerBg: "#f7fbfc",
+  containerBorder: "#ddebec",
+  msgsBg: "#eef6f7",
+  headerBg: "#ffffff",
+  dotBg: "#8a9ba7",
+};
+
 export default function XoxoFxChatbot() {
+  const { isDark } = useTheme();
+  const colors = isDark ? C : LIGHT_C;
   const [messages, setMessages] = useState([
     { role: "bot", text: "Namaste! Ask me anything about XOXO FX — bots, packages, income plans, ranks, or rewards!" },
   ]);
@@ -238,40 +278,40 @@ export default function XoxoFxChatbot() {
   };
 
   return (
-    <div style={{
+    <div className="xoxo-fx-assistant-card" style={{
       display: "flex",
       flexDirection: "column",
       height: "520px",
       borderRadius: 16,
-      border: `1px solid ${C.containerBorder}`,
+      border: `1px solid ${colors.containerBorder}`,
       overflow: "hidden",
-      background: C.containerBg,
+      background: colors.containerBg,
       fontFamily: "inherit",
-      boxShadow: `0 4px 24px ${C.shadow}`,
+      boxShadow: `0 4px 24px ${colors.shadow}`,
     }}>
       {/* Header */}
       <div style={{
         flexShrink: 0,
         padding: "10px 14px",
-        background: C.headerBg,
-        borderBottom: `1px solid ${C.border}`,
+        background: colors.headerBg,
+        borderBottom: `1px solid ${colors.border}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: C.text1, lineHeight: 1.2 }}>🧠 AI Companion</div>
-            <div style={{ fontSize: 10, color: C.text2 }}>XOXO FX Assistant</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: colors.text1, lineHeight: 1.2 }}>🧠 AI Companion</div>
+            <div style={{ fontSize: 10, color: colors.text2 }}>XOXO FX Assistant</div>
           </div>
         </div>
         <div style={{
           fontSize: 10,
-          color: C.statusText,
-          background: C.statusBg,
+          color: colors.statusText,
+          background: colors.statusBg,
           padding: "3px 10px",
           borderRadius: 6,
-          border: `1px solid ${C.statusBorder}`,
+          border: `1px solid ${colors.statusBorder}`,
           fontWeight: 700,
         }}>ONLINE</div>
       </div>
@@ -284,7 +324,7 @@ export default function XoxoFxChatbot() {
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        background: C.msgsBg,
+        background: colors.msgsBg,
         minHeight: 0,
       }}>
         {messages.map((msg, i) => (
@@ -299,13 +339,13 @@ export default function XoxoFxChatbot() {
               height: 24,
               borderRadius: "50%",
               flexShrink: 0,
-              background: msg.role === "bot" ? C.primary : C.secondary,
+              background: msg.role === "bot" ? colors.primary : colors.secondary,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: 8,
               fontWeight: 700,
-              color: msg.role === "bot" ? C.bgBase : C.bgBase,
+              color: colors.bgBase,
             }}>
               {msg.role === "bot" ? "XF" : "U"}
             </div>
@@ -316,9 +356,9 @@ export default function XoxoFxChatbot() {
               fontSize: 11,
               lineHeight: 1.6,
               whiteSpace: "pre-line",
-              background: msg.role === "bot" ? C.botBg : C.userBg,
-              color: msg.role === "bot" ? C.text1 : C.userText,
-              border: msg.role === "bot" ? `1px solid ${C.botBorder}` : "none",
+              background: msg.role === "bot" ? colors.botBg : colors.userBg,
+              color: msg.role === "bot" ? colors.text1 : colors.userText,
+              border: msg.role === "bot" ? `1px solid ${colors.botBorder}` : "none",
               borderTopLeftRadius: msg.role === "bot" ? 3 : 10,
               borderTopRightRadius: msg.role === "user" ? 3 : 10,
             }}>
@@ -334,20 +374,20 @@ export default function XoxoFxChatbot() {
               height: 24,
               borderRadius: "50%",
               flexShrink: 0,
-              background: C.primary,
+              background: colors.primary,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: 8,
               fontWeight: 700,
-              color: C.bgBase,
+              color: colors.bgBase,
             }}>XF</div>
             <div style={{
               padding: "9px 13px",
               borderRadius: 10,
               borderTopLeftRadius: 3,
-              background: C.typingBg,
-              border: `1px solid ${C.typingBorder}`,
+              background: colors.typingBg,
+              border: `1px solid ${colors.typingBorder}`,
               display: "flex",
               gap: 4,
               alignItems: "center",
@@ -357,7 +397,7 @@ export default function XoxoFxChatbot() {
                   width: 5,
                   height: 5,
                   borderRadius: "50%",
-                  background: C.dotBg,
+                  background: colors.dotBg,
                   display: "inline-block",
                   animation: `xfBlink 1.2s ${d * 0.2}s infinite`,
                 }} />
@@ -371,8 +411,8 @@ export default function XoxoFxChatbot() {
       <div style={{
         flexShrink: 0,
         padding: "7px 10px",
-        background: C.headerBg,
-        borderTop: `1px solid ${C.border}`,
+        background: colors.headerBg,
+        borderTop: `1px solid ${colors.border}`,
         display: "flex",
         flexWrap: "wrap",
         gap: 4,
@@ -382,25 +422,25 @@ export default function XoxoFxChatbot() {
             key={q.q}
             onClick={() => ask(q.q)}
             style={{
-              background: C.quickBtnBg,
-              border: `1px solid ${C.quickBtnBorder}`,
+              background: colors.quickBtnBg,
+              border: `1px solid ${colors.quickBtnBorder}`,
               padding: "3px 9px",
               borderRadius: 6,
               fontSize: 10,
               cursor: "pointer",
-              color: C.quickBtnText,
+              color: colors.quickBtnText,
               fontWeight: 600,
               transition: "all 0.15s",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = C.quickBtnHoverBg;
-              e.currentTarget.style.borderColor = C.quickBtnHoverBorder;
-              e.currentTarget.style.color = C.quickBtnHoverText;
+              e.currentTarget.style.background = colors.quickBtnHoverBg;
+              e.currentTarget.style.borderColor = colors.quickBtnHoverBorder;
+              e.currentTarget.style.color = colors.quickBtnHoverText;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = C.quickBtnBg;
-              e.currentTarget.style.borderColor = C.quickBtnBorder;
-              e.currentTarget.style.color = C.quickBtnText;
+              e.currentTarget.style.background = colors.quickBtnBg;
+              e.currentTarget.style.borderColor = colors.quickBtnBorder;
+              e.currentTarget.style.color = colors.quickBtnText;
             }}
           >
             {q.label}
@@ -412,8 +452,8 @@ export default function XoxoFxChatbot() {
       <div style={{
         flexShrink: 0,
         padding: "8px 10px",
-        background: C.headerBg,
-        borderTop: `1px solid ${C.border}`,
+        background: colors.headerBg,
+        borderTop: `1px solid ${colors.border}`,
         display: "flex",
         gap: 6,
       }}>
@@ -427,9 +467,9 @@ export default function XoxoFxChatbot() {
             fontSize: 11,
             padding: "6px 11px",
             borderRadius: 8,
-            border: `1px solid ${C.inputBorder}`,
-            background: C.inputBg,
-            color: C.text1,
+            border: `1px solid ${colors.inputBorder}`,
+            background: colors.inputBg,
+            color: colors.text1,
             outline: "none",
           }}
         />
@@ -437,8 +477,8 @@ export default function XoxoFxChatbot() {
           onClick={send}
           style={{
             padding: "6px 14px",
-            background: C.sendBtnBg,
-            color: C.sendBtnText,
+            background: colors.sendBtnBg,
+            color: colors.sendBtnText,
             border: "none",
             borderRadius: 8,
             fontSize: 11,
@@ -452,6 +492,11 @@ export default function XoxoFxChatbot() {
       </div>
 
       <style>{`
+        .xoxo-fx-assistant-card,
+        .xoxo-fx-assistant-card * {
+          transition: background 0.35s ease, color 0.35s ease,
+            border-color 0.35s ease, box-shadow 0.35s ease;
+        }
         @keyframes xfBlink {
           0%, 80%, 100% { opacity: 0.25; }
           40% { opacity: 1; }
@@ -471,7 +516,7 @@ export default function XoxoFxChatbot() {
           background: rgba(140, 180, 200, 0.3);
         }
         input::placeholder {
-          color: ${C.text3};
+          color: ${colors.text3};
         }
       `}</style>
     </div>

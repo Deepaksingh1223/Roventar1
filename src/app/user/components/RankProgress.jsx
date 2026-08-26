@@ -38,7 +38,7 @@ export default function RankProgress({
         return "/Rank/default.png"; // agar koi aur rank aaye
     }
   };
- 
+
 
   const ACCENT = "var(--brand-cyan, #14b8a6)";
   const ACCENT_2 = "var(--brand-cyan2, #0ea5a4)";
@@ -206,24 +206,42 @@ export default function RankProgress({
             <div style={styles.eyebrow}>
               <TrophyIcon />
               <span>ROVENTAR ECOSYSTEM</span>
-            </div> 
-            <h3 style={styles.title}>{title}</h3> 
-            <p style={styles.desc}>{description}</p> 
+            </div>
+            <h3 style={styles.title}>{title}</h3>
+            <p style={styles.desc}>{description}</p>
             {/* PROGRESS */}
             <div style={styles.progressSection}>
-              <div style={styles.progressHead}> 
-              </div> 
-            </div> 
+              <div style={styles.progressHead}>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className=" flex-grow-1">
+                <div className=" d-flex flex-wrap gap-2">
+                  <span className=" dx-badge-chip">Rank MANAGER</span>
+                  <span className=" dx-badge-chip success">
+                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" className="">
+                      <polyline points="2,8 5.5,11.5 14,3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" className="">
+                      </polyline>
+                      </svg>Trading Package Active</span>
+                      <span className=" dx-badge-chip success">
+                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" className="">
+                      <polyline points="2,8 5.5,11.5 14,3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" className="">
+                        </polyline></svg>KYC Verified</span><span className=" dx-badge-chip success">
+                          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" className="">
+                        <polyline points="2,8 5.5,11.5 14,3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                          className="jsx-9b7-seven c6１４３ｃ７０ｄ３ｄｆ"></polyline></svg>Account Active</span></div>
+              </div></div>
           </div>
 
           {/* RIGHT SIDE */}
-       
-              <img
-                src="/banner-img.png"
-                alt={activeRank}
-                className="Rank-img rpc-rankImg" 
-              />
-            </div>
+
+          <img
+            src="/banner-img.png"
+            alt={activeRank}
+            className="Rank-img rpc-rankImg"
+          />
+        </div>
       </div>
     </div>
   );
